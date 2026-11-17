@@ -10,9 +10,20 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.1].define(version: 2026_11_17_032345) do
+ActiveRecord::Schema[8.1].define(version: 2026_11_17_032931) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_catalog.plpgsql"
+
+  create_table "components", force: :cascade do |t|
+    t.string "character"
+    t.string "name"
+    t.string "meaning_es"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index "lower((name)::text)", name: "index_components_on_lower_name", unique: true, where: "(name IS NOT NULL)"
+    t.index ["character"], name: "index_components_on_character", unique: true, where: "(\"character\" IS NOT NULL)"
+    t.check_constraint "\"character\" IS NOT NULL OR name IS NOT NULL", name: "components_character_or_name"
+  end
 
   create_table "confusable_groups", force: :cascade do |t|
     t.bigint "plan_week_id"
@@ -33,6 +44,17 @@ ActiveRecord::Schema[8.1].define(version: 2026_11_17_032345) do
     t.index ["confusable_group_id", "kanji_id"], name: "index_confusable_members_on_confusable_group_id_and_kanji_id", unique: true
     t.index ["confusable_group_id"], name: "index_confusable_members_on_confusable_group_id"
     t.index ["kanji_id"], name: "index_confusable_members_on_kanji_id"
+  end
+
+  create_table "kanji_components", force: :cascade do |t|
+    t.bigint "kanji_id", null: false
+    t.bigint "component_id", null: false
+    t.integer "position", default: 0, null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["component_id"], name: "index_kanji_components_on_component_id"
+    t.index ["kanji_id", "component_id"], name: "index_kanji_components_on_kanji_id_and_component_id", unique: true
+    t.index ["kanji_id"], name: "index_kanji_components_on_kanji_id"
   end
 
   create_table "kanji_readings", force: :cascade do |t|
@@ -121,6 +143,8 @@ ActiveRecord::Schema[8.1].define(version: 2026_11_17_032345) do
   add_foreign_key "confusable_groups", "plan_weeks", on_delete: :nullify
   add_foreign_key "confusable_members", "confusable_groups", on_delete: :cascade
   add_foreign_key "confusable_members", "kanjis", on_delete: :cascade
+  add_foreign_key "kanji_components", "components", on_delete: :cascade
+  add_foreign_key "kanji_components", "kanjis", on_delete: :cascade
   add_foreign_key "kanji_readings", "kanjis", on_delete: :cascade
   add_foreign_key "kanjis", "lessons", on_delete: :nullify
   add_foreign_key "kanjis", "plan_weeks", on_delete: :nullify

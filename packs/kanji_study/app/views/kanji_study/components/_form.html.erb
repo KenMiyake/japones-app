@@ -1,0 +1,28 @@
+<%# locals: (component:) -%>
+<%= form_with model: component, url: (component.new_record? ? components_path : component_path(component)), class: "max-w-2xl" do |f| %>
+  <%= render "shared/form_errors", record: component %>
+
+  <div class="grid gap-6 sm:grid-cols-[8rem_1fr]">
+    <div>
+      <%= f.label :character, class: ui_label_class %>
+      <%= f.text_field :character, maxlength: 1, autocomplete: "off", lang: "ja", placeholder: "亻",
+            class: ui_input_class("kanji-guide aspect-square text-center font-kanji text-5xl!") %>
+    </div>
+    <div class="space-y-5">
+      <div>
+        <%= f.label :name, class: ui_label_class %>
+        <%= f.text_field :name, autocomplete: "off", placeholder: "persona de lado", class: ui_input_class %>
+      </div>
+      <div>
+        <%= f.label :meaning_es, class: ui_label_class %>
+        <%= f.text_field :meaning_es, placeholder: "persona", class: ui_input_class %>
+      </div>
+      <p class="text-xs text-nezumi">Basta con el carácter o el nombre.</p>
+    </div>
+  </div>
+
+  <div class="mt-10 flex items-center gap-3 border-t border-sumi/10 pt-6">
+    <%= f.submit (component.new_record? ? "Crear pieza" : "Guardar cambios"), class: ui_button_class(:primary) %>
+    <%= link_to "Cancelar", components_path, class: ui_button_class(:ghost) %>
+  </div>
+<% end %>

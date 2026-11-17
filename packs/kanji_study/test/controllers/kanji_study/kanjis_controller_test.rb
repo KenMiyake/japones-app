@@ -55,6 +55,15 @@ module KanjiStudy
       assert_select "[data-nested-form-row] select option[value=kun]", "Kun"
     end
 
+    test "al editar un kanji sin lecturas ofrece una fila on y una kun; con lecturas, solo las suyas" do
+      get edit_kanji_path(kanjis(:hito))
+      assert_select "[data-nested-form-target=list] [data-nested-form-row]", 2
+
+      get edit_kanji_path(kanjis(:taberu))
+      assert_select "[data-nested-form-target=list] [data-nested-form-row][data-new-record=false]", 2
+      assert_select "[data-nested-form-target=list] [data-nested-form-row][data-new-record=true]", 0
+    end
+
     test "crea un kanji con sus lecturas" do
       assert_difference -> { Kanji.count } => 1, -> { KanjiReading.count } => 2 do
         post kanjis_path, params: { kanji: {

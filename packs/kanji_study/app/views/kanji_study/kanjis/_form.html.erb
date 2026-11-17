@@ -13,7 +13,7 @@
     <div class="space-y-5">
       <div>
         <%= f.label :meaning_es, class: ui_label_class %>
-        <%= f.text_field :meaning_es, placeholder: "comer, comida", class: ui_input_class %>
+        <%= f.text_field :meaning_es, placeholder: "Significado en español", class: ui_input_class %>
       </div>
       <div class="grid gap-5 sm:grid-cols-3">
         <div>
@@ -56,6 +56,36 @@
     <button type="button" data-action="nested-form#add" class="<%= ui_button_class(:ghost, "mt-3") %>">
       <span aria-hidden="true">＋</span> Agregar lectura
     </button>
+  </fieldset>
+
+  <%# Piezas como chips: Enter agrega, ✕ quita. Las que no existen se crean al guardar. %>
+  <fieldset class="mt-10" data-controller="tokens">
+    <legend class="mb-1 font-kanji text-lg font-bold tracking-wide">Piezas</legend>
+    <p class="mb-4 text-sm text-nezumi">Escribe el carácter (亻) o tu nombre para la pieza (techo) y presiona Enter.</p>
+
+    <%# Asegura que el parámetro llegue aunque se quiten todas las piezas %>
+    <input type="hidden" name="kanji[component_tokens][]" value="">
+    <div class="flex flex-wrap items-center gap-2 rounded-md border border-sumi/15 bg-white/80 p-2 transition focus-within:border-shu/50 focus-within:ring-2 focus-within:ring-shu/15">
+      <div data-tokens-target="list" class="contents">
+        <% kanji.component_tokens.each do |token| %>
+          <%= render "kanji_study/kanjis/component_chip", token: %>
+        <% end %>
+      </div>
+      <input type="text" data-tokens-target="input" data-action="keydown->tokens#keydown"
+             list="component-options" autocomplete="off" lang="ja" aria-label="Agregar pieza"
+             placeholder="亻, techo…" class="min-w-32 flex-1 bg-transparent px-1 py-1 text-sm placeholder:text-sumi/30 focus:outline-none">
+      <button type="button" data-action="tokens#add" class="<%= ui_button_class(:ghost, "px-2! py-1!") %>">Agregar</button>
+    </div>
+
+    <datalist id="component-options">
+      <% KanjiStudy::Component.ordered.each do |component| %>
+        <option value="<%= component.token %>"><%= [ component.label, component.meaning_es ].compact.join(" · ") %></option>
+      <% end %>
+    </datalist>
+
+    <template data-tokens-target="template">
+      <%= render "kanji_study/kanjis/component_chip", token: "" %>
+    </template>
   </fieldset>
 
   <div class="mt-10 grid gap-5">

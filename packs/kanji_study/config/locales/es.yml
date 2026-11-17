@@ -13,7 +13,14 @@ es:
       kanji_study/word:
         one: Palabra
         other: Palabras
+      kanji_study/component:
+        one: Pieza
+        other: Piezas
     attributes:
+      kanji_study/component:
+        character: Carácter
+        name: Nombre
+        meaning_es: Significado
       kanji_study/word:
         text: Palabra
         reading: Lectura
@@ -57,6 +64,11 @@ es:
             okurigana:
               only_for_kun: solo corresponde a lecturas kun
               hiragana_required: va en hiragana
+        kanji_study/component:
+          character_or_name: Escribe el carácter o el nombre de la pieza
+          attributes:
+            character:
+              wrong_length: debe ser un solo carácter
         kanji_study/word:
           attributes:
             reading:

@@ -1,0 +1,17 @@
+_fixture:
+  model_class: KanjiStudy::Component
+
+# Solo carácter
+ninben:
+  character: 亻
+  meaning_es: persona
+
+# Carácter y nombre propio
+yane:
+  character: 𠆢
+  name: techo
+  meaning_es: techo, cubierta
+
+# Solo nombre
+bueno:
+  name: algo bueno

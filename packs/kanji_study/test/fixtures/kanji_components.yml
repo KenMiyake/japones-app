@@ -1,0 +1,12 @@
+_fixture:
+  model_class: KanjiStudy::KanjiComponent
+
+taberu_yane:
+  kanji: taberu
+  component: yane
+  position: 0
+
+taberu_bueno:
+  kanji: taberu
+  component: bueno
+  position: 1

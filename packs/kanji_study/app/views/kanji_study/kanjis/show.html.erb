@@ -82,6 +82,23 @@
       <% end %>
     </section>
 
+    <% if @kanji.components.any? %>
+      <section class="mt-8">
+        <h2 class="mb-3 text-xs font-medium uppercase tracking-[0.2em] text-nezumi">Piezas</h2>
+        <ul class="flex flex-wrap gap-2">
+          <% @kanji.components.each do |component| %>
+            <li>
+              <%= link_to components_path(anchor: dom_id(component)), title: component.meaning_es,
+                    class: "inline-flex items-baseline gap-2 rounded-full border border-sumi/15 bg-white/70 px-3 py-1 text-sm transition-colors hover:border-shu/40" do %>
+                <% if component.character %><span class="font-kanji text-base"><%= component.character %></span><% end %>
+                <% if component.name %><span class="text-nezumi"><%= component.name %></span><% end %>
+              <% end %>
+            </li>
+          <% end %>
+        </ul>
+      </section>
+    <% end %>
+
     <section class="mt-8">
       <div class="mb-3 flex items-baseline gap-3">
         <h2 class="text-xs font-medium uppercase tracking-[0.2em] text-nezumi">Palabras</h2>

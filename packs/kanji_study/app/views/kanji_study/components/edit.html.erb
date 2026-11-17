@@ -1,0 +1,11 @@
+<% content_for :title, "Editar pieza" %>
+<% content_for :breadcrumbs, breadcrumbs([ "Piezas", components_path ], [ "Editar" ]) %>
+
+<%= render "shared/page_header", kanji: "編集", reading: "へんしゅう", title: "Editar pieza" %>
+<%= render "form", component: @component %>
+
+<div class="mt-12 max-w-2xl border-t border-sumi/10 pt-6">
+  <%= button_to "Eliminar pieza", component_path(@component), method: :delete,
+        class: ui_button_class(:danger, "-ml-4"),
+        data: { turbo_confirm: "¿Eliminar esta pieza? Se quitará de los kanji que la usan." } %>
+</div>

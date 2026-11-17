@@ -1,0 +1,41 @@
+<% content_for :title, "Piezas · Japonés" %>
+<% content_for :breadcrumbs, breadcrumbs([ "Piezas" ]) %>
+
+<div class="flex flex-wrap items-start justify-between gap-4">
+  <%= render "shared/page_header", kanji: "部品", reading: "ぶひん", title: "Piezas",
+             subtitle: "Los componentes de los kanji, con los nombres de tus mnemotecnias." %>
+  <%= link_to "Nueva pieza", new_component_path, class: ui_button_class(:primary, "mt-8") %>
+</div>
+
+<% if @components.empty? %>
+  <p class="max-w-xl rounded-md border border-dashed border-sumi/20 p-8 text-nezumi">
+    Todavía no hay piezas. Puedes crearlas aquí o directamente desde el formulario de un kanji,
+    en el campo <em>Piezas</em>.
+  </p>
+<% else %>
+  <ul class="grid gap-4 sm:grid-cols-2 xl:grid-cols-3">
+    <% @components.each do |component| %>
+      <li id="<%= dom_id(component) %>" class="flex gap-4 rounded-md border border-sumi/10 bg-white/60 p-5">
+        <span class="kanji-guide grid size-16 shrink-0 place-items-center rounded border border-sumi/10 bg-white font-kanji
+                     <%= component.character ? "text-4xl" : "text-xs text-nezumi" %>">
+          <%= component.character || "—" %>
+        </span>
+        <div class="min-w-0 flex-1">
+          <div class="flex items-baseline justify-between gap-2">
+            <p class="truncate font-medium"><%= component.name || component.character %></p>
+            <%= link_to "Editar", edit_component_path(component), class: "text-xs text-nezumi hover:text-sumi" %>
+          </div>
+          <p class="text-sm <%= component.meaning_es ? "text-nezumi" : "text-sumi/30" %>">
+            <%= component.meaning_es || "Sin significado" %>
+          </p>
+          <p class="mt-3 flex flex-wrap gap-1.5 font-kanji text-lg">
+            <% component.kanjis.sort_by(&:character).each do |kanji| %>
+              <%= link_to kanji.character, kanji_path(kanji), class: "hover:text-shu" %>
+            <% end %>
+            <% if component.kanjis.empty? %><span class="font-sans text-xs text-sumi/30">Sin kanji</span><% end %>
+          </p>
+        </div>
+      </li>
+    <% end %>
+  </ul>
+<% end %>

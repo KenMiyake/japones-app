@@ -13,6 +13,9 @@ module KanjiStudy
     has_many :confusable_groups, through: :confusable_members
     has_many :word_kanjis, class_name: "KanjiStudy::WordKanji", inverse_of: :kanji, dependent: :destroy
     has_many :words, through: :word_kanjis
+    has_many :kanji_components, -> { order(:position) }, class_name: "KanjiStudy::KanjiComponent",
+             inverse_of: :kanji, dependent: :destroy, autosave: true
+    has_many :components, through: :kanji_components
 
     accepts_nested_attributes_for :readings, allow_destroy: true,
                                              reject_if: ->(attrs) { attrs["kana"].blank? && attrs["okurigana"].blank? }
@@ -26,6 +29,10 @@ module KanjiStudy
 
     before_validation :number_readings
     after_save :relink_words, if: :saved_change_to_character?
+    before_save :sync_components, if: -> { @component_tokens }
+    after_save :forget_component_tokens
+
+    attr_reader :created_components
 
     scope :ordered, -> { order(:position, :character) }
     # Por semana del plan (las sin semana al final) y luego por orden dentro de la semana.
@@ -74,6 +81,16 @@ module KanjiStudy
       known_mark.present?
     end
 
+    # Piezas como texto (carácter o nombre), tal como se escriben en el formulario.
+    # Al guardar, las que no existen se crean y quedan en `created_components`.
+    def component_tokens
+      @component_tokens || components.map(&:token)
+    end
+
+    def component_tokens=(tokens)
+      @component_tokens = Array(tokens).map { |token| token.to_s.strip }.compact_blank.uniq
+    end
+
     private
 
     # Un kanji nuevo (o con otro carácter) se enlaza con las palabras que ya lo contenían,
@@ -82,6 +99,28 @@ module KanjiStudy
       saved_change_to_character.compact.uniq.each do |character|
         Word.containing(character).find_each(&:link_kanjis!)
       end
+    end
+
+    def sync_components
+      @created_components = []
+      components = @component_tokens.map do |token|
+        Component.find_by_token(token) ||
+          Component.build_from_token(token).tap { |component| component.save! && @created_components << component }
+      end.uniq
+
+      existing = kanji_components.index_by(&:component_id)
+      self.kanji_components = components.each_with_index.map do |component, position|
+        link = existing[component.id] || KanjiComponent.new(component:)
+        link.position = position
+        link
+      end
+    end
+
+    def forget_component_tokens
+      return unless @component_tokens
+
+      @component_tokens = nil
+      association(:components).reset
     end
 
     # Las lecturas quedan en el orden en que aparecen en el formulario.

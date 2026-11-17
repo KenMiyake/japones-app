@@ -1,0 +1,10 @@
+<%# Chip de una pieza en el formulario del kanji (también sirve de <template> para los nuevos). %>
+<%# locals: (token:) -%>
+<span data-token="<%= token %>"
+      class="inline-flex items-center gap-1.5 rounded-full border border-sumi/15 bg-white py-1 pl-3 pr-1.5 text-sm
+             transition duration-200 starting:scale-90 starting:opacity-0 motion-reduce:transition-none">
+  <input type="hidden" name="kanji[component_tokens][]" value="<%= token %>">
+  <span data-token-label class="font-kanji"><%= token %></span>
+  <button type="button" data-action="tokens#remove" aria-label="Quitar pieza"
+          class="grid size-5 place-items-center rounded-full text-xs text-sumi/40 transition-colors hover:bg-shu/[0.08] hover:text-shu">✕</button>
+</span>

@@ -14,6 +14,9 @@ scope module: :kanji_study do
   # Palabras de ejemplo (se enlazan solas con sus kanji)
   resources :words, except: :show
 
+  # Piezas de los kanji
+  resources :components, except: :show
+
   # Cuadrícula de kanji sabidos
   resources :known_kanjis, only: :index
 
