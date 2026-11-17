@@ -166,6 +166,8 @@ packs/
 app/             layout, estilos y lo transversal
 docs/decisions/  decisiones de arquitectura (ADR)
 docs/guia-rails-desde-cero.md   cómo construir una app así, paso a paso
+docs/flujo-de-la-aplicacion.md  cómo viaja una request y cómo funciona Hotwire
+docs/archivos-de-la-raiz.md     para qué sirve cada archivo de la raíz
 ```
 
 Cada pack tiene su propio README: [`core`](packs/core/README.md),
