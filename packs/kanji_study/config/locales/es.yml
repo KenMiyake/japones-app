@@ -7,6 +7,9 @@ es:
       kanji_study/kanji_reading:
         one: Lectura
         other: Lecturas
+      kanji_study/confusable_group:
+        one: Grupo para distinguir
+        other: Grupos para distinguir
     attributes:
       kanji_study/kanji:
         character: Kanji
@@ -27,6 +30,11 @@ es:
         kana: Lectura
         okurigana: Okurigana
         taught: La enseña Minna
+      kanji_study/confusable_group:
+        characters: Kanji del grupo
+        plan_week: Semana del plan
+        practice_mode: Práctica
+        hint: Pista
     errors:
       models:
         kanji_study/kanji:
@@ -41,10 +49,18 @@ es:
             okurigana:
               only_for_kun: solo corresponde a lecturas kun
               hiragana_required: va en hiragana
+        kanji_study/confusable_group:
+          attributes:
+            characters:
+              too_few_kanji: "debe tener al menos 2 kanji distintos (ej.: 人/入)"
   kanji_study:
     reading_kinds:
       "on": "On"
       kun: "Kun"
+    practice_modes:
+      card: tarjeta
+      paper: papel
+      pending: por confirmar
     missing_fields:
       meaning_es: sin significado
       readings: sin lecturas

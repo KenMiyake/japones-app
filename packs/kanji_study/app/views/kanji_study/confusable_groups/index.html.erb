@@ -1,0 +1,30 @@
+<% content_for :title, "Distinguir · Japonés" %>
+<% content_for :breadcrumbs, breadcrumbs([ "Distinguir" ]) %>
+
+<div class="flex flex-wrap items-start justify-between gap-4">
+  <%= render "shared/page_header", kanji: "区別", reading: "くべつ", title: "Distinguir",
+             subtitle: "Kanji que se confunden y se practican juntos." %>
+  <%= link_to "Nuevo grupo", new_confusable_group_path, class: ui_button_class(:primary, "mt-8") %>
+</div>
+
+<%= render "kanji_study/confusable_groups/summary" %>
+
+<% if @groups_by_week.empty? %>
+  <p class="rounded-md border border-dashed border-sumi/20 p-8 text-nezumi">Todavía no hay grupos.</p>
+<% else %>
+  <% @groups_by_week.each do |week, groups| %>
+    <section class="mb-10">
+      <h2 class="mb-4 flex items-baseline gap-3">
+        <% if week %>
+          <%= link_to week.code, plan_week_path(week), class: "font-kanji text-lg font-bold tracking-wide hover:text-shu" %>
+          <span class="text-sm text-nezumi"><%= week.lessons_label %></span>
+        <% else %>
+          <span class="font-kanji text-lg font-bold tracking-wide">Sin semana</span>
+        <% end %>
+      </h2>
+      <div class="grid gap-4 sm:grid-cols-2 xl:grid-cols-3">
+        <%= render partial: "kanji_study/confusable_groups/confusable_group", collection: groups, as: :group %>
+      </div>
+    </section>
+  <% end %>
+<% end %>

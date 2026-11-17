@@ -1,0 +1,44 @@
+<%# locals: (group:) -%>
+<%= form_with model: group, url: (group.new_record? ? confusable_groups_path : confusable_group_path(group)), class: "max-w-2xl" do |f| %>
+  <%= render "shared/form_errors", record: group %>
+
+  <div class="space-y-6">
+    <div>
+      <%= f.label :characters, class: ui_label_class %>
+      <%= f.text_field :characters, required: true, autofocus: group.new_record?, autocomplete: "off", lang: "ja",
+            placeholder: "待/持/特", "aria-invalid": group.errors[:characters].any?,
+            class: ui_input_class("font-kanji text-3xl! tracking-widest") %>
+      <p class="mt-1.5 text-xs text-nezumi">
+        Separados por / o seguidos. Los kanji que no existan se crean como kanji de referencia (sin semana).
+      </p>
+    </div>
+
+    <div class="grid gap-6 sm:grid-cols-2">
+      <div>
+        <%= f.label :plan_week_id, KanjiStudy::ConfusableGroup.human_attribute_name(:plan_week), class: ui_label_class %>
+        <%= f.select :plan_week_id, plan_week_options, { include_blank: "Sin semana" }, class: ui_input_class %>
+      </div>
+      <fieldset>
+        <legend class="<%= ui_label_class %>"><%= KanjiStudy::ConfusableGroup.human_attribute_name(:practice_mode) %></legend>
+        <div class="flex flex-wrap gap-2">
+          <%= f.collection_radio_buttons :practice_mode, practice_mode_options, :last, :first do |b| %>
+            <%= b.label class: "cursor-pointer rounded-md border border-sumi/15 bg-white/70 px-3 py-2 text-sm text-nezumi transition-colors
+                               has-checked:border-sumi has-checked:bg-sumi has-checked:text-washi hover:border-sumi/30" do %>
+              <%= b.radio_button class: "sr-only" %><%= b.text %>
+            <% end %>
+          <% end %>
+        </div>
+      </fieldset>
+    </div>
+
+    <div>
+      <%= f.label :hint, class: ui_label_class %>
+      <%= f.text_area :hint, rows: 2, placeholder: "Qué los diferencia…", class: ui_input_class %>
+    </div>
+  </div>
+
+  <div class="mt-10 flex items-center gap-3 border-t border-sumi/10 pt-6">
+    <%= f.submit (group.new_record? ? "Crear grupo" : "Guardar cambios"), class: ui_button_class(:primary) %>
+    <%= link_to "Cancelar", confusable_groups_path, class: ui_button_class(:ghost) %>
+  </div>
+<% end %>

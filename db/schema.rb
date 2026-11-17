@@ -10,9 +10,30 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.1].define(version: 2026_11_17_030536) do
+ActiveRecord::Schema[8.1].define(version: 2026_11_17_031212) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_catalog.plpgsql"
+
+  create_table "confusable_groups", force: :cascade do |t|
+    t.bigint "plan_week_id"
+    t.string "practice_mode", default: "pending", null: false
+    t.text "hint"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["plan_week_id"], name: "index_confusable_groups_on_plan_week_id"
+    t.check_constraint "practice_mode::text = ANY (ARRAY['card'::character varying, 'paper'::character varying, 'pending'::character varying]::text[])", name: "confusable_groups_practice_mode"
+  end
+
+  create_table "confusable_members", force: :cascade do |t|
+    t.bigint "confusable_group_id", null: false
+    t.bigint "kanji_id", null: false
+    t.integer "position", default: 0, null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["confusable_group_id", "kanji_id"], name: "index_confusable_members_on_confusable_group_id_and_kanji_id", unique: true
+    t.index ["confusable_group_id"], name: "index_confusable_members_on_confusable_group_id"
+    t.index ["kanji_id"], name: "index_confusable_members_on_kanji_id"
+  end
 
   create_table "kanji_readings", force: :cascade do |t|
     t.bigint "kanji_id", null: false
@@ -75,6 +96,9 @@ ActiveRecord::Schema[8.1].define(version: 2026_11_17_030536) do
     t.check_constraint "last_lesson >= first_lesson", name: "plan_weeks_lesson_range"
   end
 
+  add_foreign_key "confusable_groups", "plan_weeks", on_delete: :nullify
+  add_foreign_key "confusable_members", "confusable_groups", on_delete: :cascade
+  add_foreign_key "confusable_members", "kanjis", on_delete: :cascade
   add_foreign_key "kanji_readings", "kanjis", on_delete: :cascade
   add_foreign_key "kanjis", "lessons", on_delete: :nullify
   add_foreign_key "kanjis", "plan_weeks", on_delete: :nullify

@@ -5,6 +5,12 @@ scope module: :kanji_study do
     resource :known_mark, only: %i[create destroy]
   end
 
+  # Grupos para distinguir. El modo de práctica se cambia desde la tarjeta del grupo:
+  # PATCH /confusable_groups/:id/practice_mode
+  resources :confusable_groups, except: :show do
+    resource :practice_mode, only: :update, controller: "confusable_practice_modes"
+  end
+
   # Cuadrícula de kanji sabidos
   resources :known_kanjis, only: :index
 

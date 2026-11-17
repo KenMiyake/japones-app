@@ -1,0 +1,5 @@
+<% content_for :title, "Nuevo grupo · Distinguir" %>
+<% content_for :breadcrumbs, breadcrumbs([ "Distinguir", confusable_groups_path ], [ "Nuevo" ]) %>
+
+<%= render "shared/page_header", kanji: "新規", reading: "しんき", title: "Nuevo grupo para distinguir" %>
+<%= render "form", group: @group %>

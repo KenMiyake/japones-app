@@ -1,0 +1,28 @@
+<%# Grupos para distinguir de la semana (registrada en PlanWeekSections). %>
+<%# locals: (plan_week:) -%>
+<% groups = KanjiStudy::ConfusableGroup.where(plan_week:).includes(:kanjis).order(:id) %>
+<section id="confusable_section" class="mb-12">
+  <div class="mb-4 flex items-baseline gap-3">
+    <h2 class="text-xs font-medium uppercase tracking-[0.2em] text-nezumi">Distinguir</h2>
+    <span class="text-xs text-nezumi"><%= groups.size %></span>
+    <%= link_to "＋ Agregar", new_confusable_group_path(week: plan_week.code),
+          class: "ml-auto text-sm text-nezumi transition-colors hover:text-shu print:hidden" %>
+  </div>
+
+  <% if groups.any? %>
+    <ul class="flex flex-wrap gap-3">
+      <% groups.each do |group| %>
+        <li class="flex items-center gap-3 rounded-md border border-sumi/10 bg-white/60 px-4 py-2.5">
+          <span class="font-kanji text-2xl tracking-wide">
+            <% group.kanjis.each_with_index do |kanji, index| %>
+              <% if index.positive? %><span class="text-sumi/20">／</span><% end %><%= link_to kanji.character, kanji_path(kanji), class: "hover:text-shu" %>
+            <% end %>
+          </span>
+          <%= practice_mode_badge(group) %>
+        </li>
+      <% end %>
+    </ul>
+  <% else %>
+    <p class="text-sm text-nezumi">Sin grupos esta semana.</p>
+  <% end %>
+</section>

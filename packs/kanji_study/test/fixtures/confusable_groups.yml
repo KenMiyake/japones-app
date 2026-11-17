@@ -1,0 +1,13 @@
+_fixture:
+  model_class: KanjiStudy::ConfusableGroup
+
+# 人/食 en S1, con tarjeta.
+hito_taberu:
+  plan_week: s1
+  practice_mode: card
+  hint: Pista de prueba.
+
+# 間 y 人, por confirmar, en S5.
+aida_hito:
+  plan_week: s5
+  practice_mode: pending

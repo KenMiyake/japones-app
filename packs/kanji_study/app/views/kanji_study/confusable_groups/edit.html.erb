@@ -1,0 +1,11 @@
+<% content_for :title, "Editar grupo · Distinguir" %>
+<% content_for :breadcrumbs, breadcrumbs([ "Distinguir", confusable_groups_path ], [ "Editar" ]) %>
+
+<%= render "shared/page_header", kanji: "編集", reading: "へんしゅう", title: "Editar grupo" %>
+<%= render "form", group: @group %>
+
+<div class="mt-12 max-w-2xl border-t border-sumi/10 pt-6">
+  <%= button_to "Eliminar grupo", confusable_group_path(@group), method: :delete,
+        class: ui_button_class(:danger, "-ml-4"),
+        data: { turbo_confirm: "¿Eliminar este grupo? Los kanji no se eliminan." } %>
+</div>

@@ -82,6 +82,29 @@
       <% end %>
     </section>
 
+    <% if @kanji.confusable_groups.any? %>
+      <section class="mt-8">
+        <h2 class="mb-3 text-xs font-medium uppercase tracking-[0.2em] text-nezumi">Se confunde con</h2>
+        <ul class="flex flex-wrap gap-3">
+          <% @kanji.confusable_groups.each do |group| %>
+            <li class="flex items-center gap-3 rounded-md border border-sumi/10 bg-white/60 px-3 py-2">
+              <span class="font-kanji text-xl">
+                <% group.kanjis.each_with_index do |kanji, index| %>
+                  <% if index.positive? %><span class="text-sumi/20">／</span><% end %>
+                  <% if kanji == @kanji %>
+                    <span class="text-shu"><%= kanji.character %></span>
+                  <% else %>
+                    <%= link_to kanji.character, kanji_path(kanji), class: "hover:text-shu" %>
+                  <% end %>
+                <% end %>
+              </span>
+              <%= practice_mode_badge(group) %>
+            </li>
+          <% end %>
+        </ul>
+      </section>
+    <% end %>
+
     <% if @kanji.notes %>
       <section class="mt-8">
         <h2 class="mb-3 text-xs font-medium uppercase tracking-[0.2em] text-nezumi">Notas</h2>

@@ -1,0 +1,23 @@
+<%# Tarjeta de un grupo para distinguir. %>
+<%# locals: (group:) -%>
+<article id="<%= dom_id(group) %>"
+         class="flex flex-col rounded-md border bg-white/60 p-5 transition-colors duration-300
+                <%= group.practice_pending? ? "border-dashed border-kincha/40" : "border-sumi/10" %>">
+  <div class="flex items-center justify-center gap-3 py-2">
+    <% group.kanjis.each_with_index do |kanji, index| %>
+      <% if index.positive? %><span class="text-2xl font-light text-sumi/20" aria-hidden="true">／</span><% end %>
+      <%= link_to kanji.character, kanji_path(kanji), title: kanji.meaning_es, data: { turbo_frame: "_top" },
+            class: "font-kanji text-5xl leading-none transition-colors hover:text-shu" %>
+    <% end %>
+  </div>
+
+  <% if group.hint %>
+    <p class="mt-3 text-center text-sm text-nezumi"><%= group.hint %></p>
+  <% end %>
+
+  <div class="mt-auto flex items-center justify-between gap-2 pt-5">
+    <%= render "kanji_study/confusable_groups/practice_mode_control", group: %>
+    <%= link_to "Editar", edit_confusable_group_path(group), data: { turbo_frame: "_top" },
+          class: "text-xs text-nezumi transition-colors hover:text-sumi" %>
+  </div>
+</article>

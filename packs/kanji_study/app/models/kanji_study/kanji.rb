@@ -9,6 +9,8 @@ module KanjiStudy
     has_many :readings, -> { order(:position, :id) },
              class_name: "KanjiStudy::KanjiReading", inverse_of: :kanji, dependent: :destroy
     has_one :known_mark, class_name: "KanjiStudy::KnownKanji", inverse_of: :kanji, dependent: :destroy
+    has_many :confusable_members, class_name: "KanjiStudy::ConfusableMember", inverse_of: :kanji, dependent: :destroy
+    has_many :confusable_groups, through: :confusable_members
 
     accepts_nested_attributes_for :readings, allow_destroy: true,
                                              reject_if: ->(attrs) { attrs["kana"].blank? && attrs["okurigana"].blank? }

@@ -1,0 +1,4 @@
+<%# Tras cambiar el modo de práctica: actualiza la tarjeta y el resumen (si están en la página). %>
+<%= turbo_stream.replace dom_id(@group), method: :morph,
+      partial: "kanji_study/confusable_groups/confusable_group", locals: { group: @group } %>
+<%= turbo_stream.replace "confusable_summary", method: :morph, partial: "kanji_study/confusable_groups/summary" %>

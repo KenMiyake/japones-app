@@ -1,0 +1,11 @@
+<%# Control segmentado: tarjeta / papel / por confirmar. Cada opción es un PATCH. %>
+<%# locals: (group:) -%>
+<div role="group" aria-label="Modo de práctica" class="inline-flex rounded-md border border-sumi/10 bg-washi p-0.5">
+  <% KanjiStudy::ConfusableGroup.practice_modes.each_key do |mode| %>
+    <% active = group.practice_mode == mode %>
+    <%= button_to practice_mode_label(mode), confusable_group_practice_mode_path(group),
+          method: :patch, params: { practice_mode: mode }, "aria-pressed": active,
+          class: [ "rounded px-2.5 py-1 text-xs transition-colors duration-200 motion-reduce:transition-none",
+                   active ? "bg-sumi text-washi shadow-sm" : "text-nezumi hover:text-sumi" ] %>
+  <% end %>
+</div>

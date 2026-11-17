@@ -1,0 +1,22 @@
+_fixture:
+  model_class: KanjiStudy::ConfusableMember
+
+hito_taberu_1:
+  confusable_group: hito_taberu
+  kanji: hito
+  position: 0
+
+hito_taberu_2:
+  confusable_group: hito_taberu
+  kanji: taberu
+  position: 1
+
+aida_hito_1:
+  confusable_group: aida_hito
+  kanji: aida
+  position: 0
+
+aida_hito_2:
+  confusable_group: aida_hito
+  kanji: hito
+  position: 1
