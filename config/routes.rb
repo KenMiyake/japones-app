@@ -6,5 +6,5 @@ Rails.application.routes.draw do
   draw(:core)
   draw(:kanji_study)
 
-  root "home#show"
+  root "plan_weeks#index"
 end

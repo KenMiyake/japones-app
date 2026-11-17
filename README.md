@@ -71,7 +71,21 @@ como si fueran parte de `app/`, y `bin/rails test` corre también sus tests.
 
 ## Cargar los datos iniciales
 
-*Pendiente (paso 1 en adelante).*
+```sh
+docker compose run --rm web bin/rails db:seed
+```
+
+Carga desde `db/seeds/`:
+
+| Archivo | Qué crea |
+|---|---|
+| `plan.csv` | Lecciones L01–L25 de Minna I y semanas S1–S8 (desde el lunes 16/11/2026, consecutivas) |
+
+El seed es **idempotente y no destructivo**: crea solo lo que falta y nunca sobrescribe lo
+que ya editaste en la app. Se puede volver a correr sin problema.
+
+Para empezar de cero: `docker compose run --rm web bin/rails db:reset` (borra todo y
+vuelve a sembrar).
 
 ## Aprendizajes: Tailwind vs. Bootstrap 5 + SCSS
 
@@ -125,3 +139,53 @@ Diferencias:
   `font-kanji`; en Bootstrap se sobrescriben variables SCSS *antes* de importar Bootstrap.
 - **Impresión:** `print:hidden` (variante de Tailwind) ↔ `d-print-none` (utilidad de Bootstrap).
 - **Contenedor:** `mx-auto max-w-6xl px-5` ↔ `.container`, que trae anchos fijos por breakpoint.
+
+### Insignia (badge) con variantes de color
+
+**Tailwind** (`app/helpers/application_helper.rb`): como las listas de clases son largas,
+se extraen a un helper y cada variante es un conjunto de clases.
+
+```ruby
+BADGE_TONES = {
+  warning: "bg-amber-50 text-amber-800 ring-amber-300",
+  info:    "bg-sky-50 text-sky-800 ring-sky-300"
+}.freeze
+
+def badge(text, tone: :neutral)
+  tag.span(text, class: [
+    "inline-flex items-center rounded-full px-2 py-0.5 text-xs font-medium ring-1 ring-inset",
+    BADGE_TONES.fetch(tone)
+  ])
+end
+```
+
+```erb
+<%= badge "provisional", tone: :warning %>
+```
+
+**Bootstrap 5 + SCSS**: el componente ya existe; las variantes salen del mapa
+`$theme-colors`, y un estilo propio se arma con un mixin que recorre ese mapa.
+
+```erb
+<span class="badge rounded-pill text-bg-warning">provisional</span>
+```
+
+```scss
+// Variante "suave" propia, generada para todos los colores del tema
+@each $name, $color in $theme-colors {
+  .badge-soft-#{$name} {
+    background-color: tint-color($color, 90%);
+    color: shade-color($color, 40%);
+    border: 1px solid tint-color($color, 50%);
+  }
+}
+```
+
+Diferencias:
+
+- **Dónde vive la variante:** en Tailwind es un hash de Ruby que elige clases; en
+  Bootstrap es CSS generado con `@each` sobre un mapa de SCSS.
+- **Reutilización:** en Tailwind se reutiliza con helpers o partials (Ruby); en Bootstrap,
+  con clases semánticas (`.badge-soft-warning`) y mixins (SCSS).
+- **CSS resultante:** Tailwind solo incluye las clases que aparecen en el código; el `@each`
+  de SCSS genera todas las variantes, se usen o no.

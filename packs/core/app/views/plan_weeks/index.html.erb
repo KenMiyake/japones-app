@@ -1,0 +1,32 @@
+<% content_for :title, "Plan de estudio · Japonés" %>
+
+<header class="mb-6">
+  <h1 class="text-2xl font-bold">Plan de estudio</h1>
+  <p class="mt-1 text-stone-600">8 semanas de kanji siguiendo <em>Minna no Nihongo I</em>.</p>
+</header>
+
+<% if @plan_weeks.empty? %>
+  <p class="rounded-lg border border-dashed border-stone-300 p-6 text-stone-600">
+    Todavía no hay semanas cargadas. Ejecuta <code class="font-mono">bin/rails db:seed</code>.
+  </p>
+<% else %>
+  <ol class="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
+    <% @plan_weeks.each do |week| %>
+      <li id="<%= dom_id(week) %>">
+        <%= link_to plan_week_path(week),
+              class: ["block h-full rounded-lg border bg-white p-5 transition hover:border-stone-400 hover:shadow-sm",
+                      week.current? ? "border-sky-400 ring-2 ring-sky-200" : "border-stone-200"] do %>
+          <div class="flex items-start justify-between gap-2">
+            <span class="text-3xl font-bold"><%= week.code %></span>
+            <div class="flex flex-col items-end gap-1">
+              <%= badge "esta semana", tone: :info if week.current? %>
+              <%= badge "provisional", tone: :warning if week.provisional? %>
+            </div>
+          </div>
+          <p class="mt-3 font-medium"><%= week.lessons_label %></p>
+          <p class="text-sm text-stone-600"><%= date_range(week.starts_on, week.ends_on) %></p>
+        <% end %>
+      </li>
+    <% end %>
+  </ol>
+<% end %>

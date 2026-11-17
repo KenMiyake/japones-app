@@ -22,7 +22,8 @@ services:
     build:
       context: .
       dockerfile: Dockerfile.dev
-    command: bin/dev
+    # Borra el PID que queda tras un `docker compose restart` (el /tmp del contenedor persiste).
+    command: sh -c "rm -f /tmp/server.pid && bin/dev"
     ports:
       - "3000:3000"
     environment:

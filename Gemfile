@@ -18,6 +18,10 @@ gem "stimulus-rails"
 gem "tailwindcss-rails"
 # Organiza el código en packs por dominio (packs/*) [https://github.com/rubyatscale/packs-rails]
 gem "packs-rails"
+# Traducciones de Rails al español (fechas, validaciones) [https://github.com/svenfuchs/rails-i18n]
+gem "rails-i18n"
+# Lectura de CSV (seed e importación). Desde Ruby 3.4 ya no viene incluida.
+gem "csv"
 # Use Redis adapter to run Action Cable in production
 # gem "redis", ">= 4.0.1"
 

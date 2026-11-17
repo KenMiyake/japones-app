@@ -1,9 +1,6 @@
-# This file should ensure the existence of records required to run the application in every environment (production,
-# development, test). The code here should be idempotent so that it can be executed at any point in every environment.
-# The data can then be loaded with the bin/rails db:seed command (or created alongside the database with db:setup).
-#
-# Example:
-#
-#   ["Action", "Comedy", "Drama", "Horror"].each do |genre_name|
-#     MovieGenre.find_or_create_by!(name: genre_name)
-#   end
+# Datos iniciales: bin/rails db:seed
+# Cada seeder es idempotente y no sobrescribe lo que ya existe (se puede volver a correr).
+
+plan = PlanSeeder.call
+puts "Lecciones creadas: #{plan.lessons_created}"
+puts "Semanas del plan creadas: #{plan.weeks_created}"

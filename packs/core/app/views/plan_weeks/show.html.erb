@@ -1,0 +1,33 @@
+<% content_for :title, "#{@plan_week.code} · Plan de estudio" %>
+
+<nav class="mb-4 text-sm print:hidden">
+  <%= link_to "← Plan de estudio", plan_weeks_path, class: "text-stone-600 hover:text-stone-900" %>
+</nav>
+
+<header class="mb-6 flex flex-wrap items-baseline gap-x-4 gap-y-2">
+  <h1 class="text-3xl font-bold"><%= @plan_week.code %></h1>
+  <p class="text-lg"><%= @plan_week.lessons_label %></p>
+  <p class="text-stone-600"><%= date_range(@plan_week.starts_on, @plan_week.ends_on) %></p>
+  <%= badge "esta semana", tone: :info if @plan_week.current? %>
+  <%= badge "provisional", tone: :warning if @plan_week.provisional? %>
+</header>
+
+<% if @plan_week.provisional? %>
+  <p class="mb-6 rounded-lg bg-amber-50 p-4 text-sm text-amber-900">
+    El contenido de esta semana es provisional: sus lecciones todavía no están escritas.
+  </p>
+<% end %>
+
+<section>
+  <h2 class="mb-3 text-lg font-semibold">Lecciones</h2>
+  <ul class="divide-y divide-stone-200 rounded-lg border border-stone-200 bg-white">
+    <% @lessons.each do |lesson| %>
+      <li id="<%= dom_id(lesson) %>" class="flex items-baseline gap-3 px-4 py-3">
+        <span class="font-medium"><%= lesson.code %></span>
+        <span class="<%= lesson.title.present? ? "" : "text-stone-400 italic" %>">
+          <%= lesson.title.presence || "Sin título" %>
+        </span>
+      </li>
+    <% end %>
+  </ul>
+</section>

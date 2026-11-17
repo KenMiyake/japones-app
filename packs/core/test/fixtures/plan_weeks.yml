@@ -1,0 +1,23 @@
+s1:
+  code: S1
+  position: 1
+  starts_on: 2026-11-16
+  first_lesson: 1
+  last_lesson: 3
+  provisional: false
+
+s4:
+  code: S4
+  position: 4
+  starts_on: 2026-12-07
+  first_lesson: 8
+  last_lesson: 9
+  provisional: true
+
+s5:
+  code: S5
+  position: 5
+  starts_on: 2026-12-14
+  first_lesson: 9
+  last_lesson: 11
+  provisional: true
