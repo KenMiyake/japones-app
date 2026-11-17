@@ -1,0 +1,17 @@
+_fixture:
+  model_class: KanjiStudy::KanjiReading
+
+taberu_shoku:
+  kanji: taberu
+  kind: "on"
+  kana: ショク
+  position: 0
+  taught: true
+
+taberu_ta:
+  kanji: taberu
+  kind: kun
+  kana: た
+  okurigana: べる
+  position: 1
+  taught: true

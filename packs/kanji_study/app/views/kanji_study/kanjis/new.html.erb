@@ -1,0 +1,5 @@
+<% content_for :title, "Nuevo kanji" %>
+<% content_for :breadcrumbs, breadcrumbs([ "Kanji", kanjis_path ], [ "Nuevo" ]) %>
+
+<%= render "shared/page_header", kanji: "新規", reading: "しんき", title: "Nuevo kanji" %>
+<%= render "form", kanji: @kanji %>

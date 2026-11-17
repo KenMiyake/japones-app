@@ -60,8 +60,17 @@ app/             layout, estilos y lo transversal
 docs/decisions/  decisiones de arquitectura (ADR)
 ```
 
-Cada pack tiene su propio `app/`, `config/routes/` y `test/`. Rails carga sus carpetas
-como si fueran parte de `app/`, y `bin/rails test` corre también sus tests.
+Cada pack tiene su propio `app/`, `config/routes/`, `config/locales/` y `test/`. Rails
+carga sus carpetas como si fueran parte de `app/`, y `bin/rails test` corre también sus
+tests.
+
+`core` no depende de ningún dominio. Para que la página de una semana muestre los kanji,
+`kanji_study` registra una sección en el punto de extensión `PlanWeekSections`
+(`packs/kanji_study/config/initializers/plan_week_sections.rb`). Un pack nuevo (gramática)
+agregaría la suya igual, sin tocar `core`.
+
+> Si creas una carpeta nueva dentro de un pack (por ejemplo `app/helpers`), reinicia el
+> servidor: Rails registra las carpetas de autocarga al arrancar.
 
 ## Decisiones
 
@@ -80,6 +89,7 @@ Carga desde `db/seeds/`:
 | Archivo | Qué crea |
 |---|---|
 | `plan.csv` | Lecciones L01–L25 de Minna I y semanas S1–S8 (desde el lunes 16/11/2026, consecutivas) |
+| `plan.csv` (columna `kanji`) | Los 196 kanji del plan, cada uno en su semana y en el orden del CSV, sin significado ni lecturas |
 
 El seed es **idempotente y no destructivo**: crea solo lo que falta y nunca sobrescribe lo
 que ya editaste en la app. Se puede volver a correr sin problema.

@@ -1,0 +1,52 @@
+es:
+  activerecord:
+    models:
+      kanji_study/kanji:
+        one: Kanji
+        other: Kanji
+      kanji_study/kanji_reading:
+        one: Lectura
+        other: Lecturas
+    attributes:
+      kanji_study/kanji:
+        character: Kanji
+        plan_week: Semana del plan
+        position: Orden en la semana
+        lesson: Lección de Minna
+        meaning_es: Significado
+        mnemonic: Mnemotecnia
+        notes: Notas
+        readings: Lecturas
+      kanji_study/kanji/readings:
+        kind: Tipo
+        kana: Lectura
+        okurigana: Okurigana
+        taught: La enseña Minna
+      kanji_study/kanji_reading:
+        kind: Tipo
+        kana: Lectura
+        okurigana: Okurigana
+        taught: La enseña Minna
+    errors:
+      models:
+        kanji_study/kanji:
+          attributes:
+            character:
+              single_kanji: debe ser un solo kanji
+        kanji_study/kanji_reading:
+          attributes:
+            kana:
+              katakana_required: "de una lectura on va en katakana (ej.: ショク)"
+              hiragana_required: "de una lectura kun va en hiragana (ej.: た)"
+            okurigana:
+              only_for_kun: solo corresponde a lecturas kun
+              hiragana_required: va en hiragana
+  kanji_study:
+    reading_kinds:
+      "on": "On"
+      kun: "Kun"
+    missing_fields:
+      meaning_es: sin significado
+      readings: sin lecturas
+      mnemonic: sin mnemotecnia
+      lesson: sin lección

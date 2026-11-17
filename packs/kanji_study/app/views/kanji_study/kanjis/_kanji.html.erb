@@ -1,0 +1,14 @@
+<%# Ficha pequeña de un kanji (listados y página de semana). %>
+<%# locals: (kanji:) -%>
+<%= link_to kanji_path(kanji), id: dom_id(kanji), title: kanji.meaning_es,
+      class: "group/tile relative flex aspect-square flex-col items-center justify-center rounded-md border border-sumi/10 bg-white/60
+              transition duration-200 ease-out hover:-translate-y-0.5 hover:border-sumi/25 hover:bg-white hover:shadow-[0_8px_20px_-12px_rgb(36_34_31/0.3)]
+              motion-reduce:transition-none motion-reduce:hover:translate-y-0" do %>
+  <span class="font-kanji text-4xl leading-none transition-colors group-hover/tile:text-shu"><%= kanji.character %></span>
+  <span class="mt-2 max-w-full truncate px-2 text-[11px] <%= kanji.meaning_es ? "text-nezumi" : "text-sumi/25" %>">
+    <%= kanji.meaning_es || "—" %>
+  </span>
+  <% unless kanji.complete? %>
+    <span class="absolute right-2 top-2 size-1.5 rounded-full bg-kincha/70" title="Le faltan datos"></span>
+  <% end %>
+<% end %>

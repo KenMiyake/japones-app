@@ -1,0 +1,14 @@
+<%# Avisos tras una acción. Se ocultan solos (controlador flash) o con ✕. %>
+<div class="pointer-events-none fixed right-4 top-20 z-50 flex w-80 flex-col gap-2 lg:right-12">
+  <% { notice: "border-matcha/30 text-matcha", alert: "border-shu/30 text-shu" }.each do |type, tone| %>
+    <% if flash[type].present? %>
+      <div role="status" data-controller="flash"
+           class="pointer-events-auto flex items-start gap-3 rounded-md border bg-white px-4 py-3 text-sm shadow-[0_12px_32px_-12px_rgb(36_34_31/0.3)]
+                  transition duration-300 ease-out starting:translate-x-4 starting:opacity-0 data-leaving:translate-x-4 data-leaving:opacity-0
+                  motion-reduce:transition-none <%= tone %>">
+        <span class="flex-1 text-sumi"><%= flash[type] %></span>
+        <button type="button" data-action="flash#dismiss" aria-label="Cerrar aviso" class="text-sumi/40 hover:text-sumi">✕</button>
+      </div>
+    <% end %>
+  <% end %>
+</div>

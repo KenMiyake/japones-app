@@ -28,6 +28,11 @@
   </p>
 <% end %>
 
+<%# Secciones aportadas por otros packs (kanji, y en el futuro gramática…) %>
+<% PlanWeekSections.all.each do |section| %>
+  <%= render section.partial, plan_week: @plan_week %>
+<% end %>
+
 <section>
   <h2 class="mb-4 text-xs font-medium uppercase tracking-[0.2em] text-nezumi">Lecciones</h2>
   <ul class="divide-y divide-sumi/10 border-y border-sumi/10">

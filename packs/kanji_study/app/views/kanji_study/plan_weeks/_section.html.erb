@@ -1,0 +1,21 @@
+<%# Sección de kanji en la página de una semana (registrada en PlanWeekSections). %>
+<%# locals: (plan_week:) -%>
+<% kanjis = KanjiStudy::Kanji.in_plan_week(plan_week).includes(:readings, :lesson).ordered %>
+<section id="kanji_section" class="mb-12">
+  <div class="mb-4 flex items-baseline gap-3">
+    <h2 class="text-xs font-medium uppercase tracking-[0.2em] text-nezumi">Kanji</h2>
+    <span class="text-xs text-nezumi">
+      <%= kanjis.size %> · <%= kanjis.count(&:complete?) %> completos
+    </span>
+    <%= link_to "＋ Agregar", new_kanji_path(week: plan_week.code),
+          class: "ml-auto text-sm text-nezumi transition-colors hover:text-shu print:hidden" %>
+  </div>
+
+  <% if kanjis.any? %>
+    <div class="grid grid-cols-4 gap-3 sm:grid-cols-6 md:grid-cols-8 xl:grid-cols-10">
+      <%= render partial: "kanji_study/kanjis/kanji", collection: kanjis, as: :kanji %>
+    </div>
+  <% else %>
+    <p class="rounded-md border border-dashed border-sumi/20 p-6 text-sm text-nezumi">Esta semana todavía no tiene kanji.</p>
+  <% end %>
+</section>

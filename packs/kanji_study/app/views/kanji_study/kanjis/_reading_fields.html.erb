@@ -1,0 +1,23 @@
+<%# Una fila de lectura en el formulario de kanji. %>
+<%# locals: (f:) -%>
+<% reading = f.object %>
+<div data-nested-form-row data-new-record="<%= reading.new_record? %>"
+     class="rounded-md transition duration-300 ease-out starting:-translate-y-1 starting:opacity-0 motion-reduce:transition-none">
+  <div class="grid grid-cols-[6rem_1fr_1fr_auto_2.5rem] items-center gap-3">
+    <%= f.select :kind, reading_kind_options, {}, class: ui_input_class, "aria-label": "Tipo" %>
+    <%= f.text_field :kana, placeholder: "ショク / た", autocomplete: "off", lang: "ja", "aria-label": "Lectura",
+          "aria-invalid": reading.errors[:kana].any?, class: ui_input_class("font-kanji") %>
+    <%= f.text_field :okurigana, placeholder: (reading.kind_on? ? nil : "べる"), autocomplete: "off", lang: "ja", "aria-label": "Okurigana",
+          "aria-invalid": reading.errors[:okurigana].any?, class: ui_input_class("font-kanji") %>
+    <label class="flex items-center gap-2 px-1 text-sm text-nezumi" title="La enseña Minna">
+      <%= f.check_box :taught, class: "size-4 rounded border-sumi/30 accent-shu" %>
+      <span class="sm:sr-only">Minna</span>
+    </label>
+    <%= f.hidden_field :_destroy %>
+    <button type="button" data-action="nested-form#remove" aria-label="Quitar lectura"
+            class="grid size-9 place-items-center rounded-md text-sumi/40 transition-colors hover:bg-shu/[0.06] hover:text-shu">✕</button>
+  </div>
+  <% if reading.errors.any? %>
+    <p class="mt-1 px-1 text-xs text-shu"><%= reading.errors.full_messages.to_sentence %></p>
+  <% end %>
+</div>

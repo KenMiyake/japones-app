@@ -10,9 +10,39 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.1].define(version: 2026_11_17_020252) do
+ActiveRecord::Schema[8.1].define(version: 2026_11_17_023710) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_catalog.plpgsql"
+
+  create_table "kanji_readings", force: :cascade do |t|
+    t.bigint "kanji_id", null: false
+    t.string "kind", null: false
+    t.string "kana", null: false
+    t.string "okurigana"
+    t.integer "position", default: 0, null: false
+    t.boolean "taught", default: false, null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["kana"], name: "index_kanji_readings_on_kana"
+    t.index ["kanji_id"], name: "index_kanji_readings_on_kanji_id"
+    t.check_constraint "kind::text = ANY (ARRAY['on'::character varying, 'kun'::character varying]::text[])", name: "kanji_readings_kind"
+  end
+
+  create_table "kanjis", force: :cascade do |t|
+    t.string "character", null: false
+    t.bigint "plan_week_id"
+    t.integer "position"
+    t.bigint "lesson_id"
+    t.string "meaning_es"
+    t.text "mnemonic"
+    t.text "notes"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["character"], name: "index_kanjis_on_character", unique: true
+    t.index ["lesson_id"], name: "index_kanjis_on_lesson_id"
+    t.index ["plan_week_id", "position"], name: "index_kanjis_on_plan_week_id_and_position"
+    t.index ["plan_week_id"], name: "index_kanjis_on_plan_week_id"
+  end
 
   create_table "lessons", force: :cascade do |t|
     t.integer "number", null: false
@@ -36,4 +66,8 @@ ActiveRecord::Schema[8.1].define(version: 2026_11_17_020252) do
     t.index ["position"], name: "index_plan_weeks_on_position", unique: true
     t.check_constraint "last_lesson >= first_lesson", name: "plan_weeks_lesson_range"
   end
+
+  add_foreign_key "kanji_readings", "kanjis", on_delete: :cascade
+  add_foreign_key "kanjis", "lessons", on_delete: :nullify
+  add_foreign_key "kanjis", "plan_weeks", on_delete: :nullify
 end

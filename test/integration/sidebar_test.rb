@@ -16,8 +16,8 @@ class SidebarTest < ActionDispatch::IntegrationTest
   test "las secciones sin implementar no son enlaces" do
     get root_path
 
-    assert_select "aside#sidebar nav span[aria-disabled=true]", /Kanji/
-    assert_select "aside#sidebar nav a", text: /Kanji/, count: 0
+    assert_select "aside#sidebar nav span[aria-disabled=true]", /Palabras/
+    assert_select "aside#sidebar nav a", text: /Palabras/, count: 0
   end
 
   test "renderiza el sidebar colapsado según la cookie, sin esperar al JS" do

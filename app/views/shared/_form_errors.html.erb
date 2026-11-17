@@ -1,0 +1,12 @@
+<%# Resumen de errores de validación. %>
+<%# locals: (record:) -%>
+<% if record.errors.any? %>
+  <div role="alert" class="mb-8 border-l-2 border-shu/60 py-1 pl-4">
+    <p class="text-sm font-medium text-shu">No se pudo guardar:</p>
+    <ul class="mt-1 list-inside list-disc text-sm text-sumi/80">
+      <% record.errors.full_messages.uniq.each do |message| %>
+        <li><%= message %></li>
+      <% end %>
+    </ul>
+  </div>
+<% end %>

@@ -21,6 +21,14 @@
   --spacing-sidebar-collapsed: 4.5rem;
 }
 
+/* Cruz de guía de los cuadernos de caligrafía, detrás de un kanji grande. */
+@utility kanji-guide {
+  --guide: color-mix(in oklab, var(--color-shu) 16%, transparent);
+  background-image:
+    linear-gradient(to right, transparent calc(50% - 0.5px), var(--guide) calc(50% - 0.5px), var(--guide) calc(50% + 0.5px), transparent calc(50% + 0.5px)),
+    linear-gradient(to bottom, transparent calc(50% - 0.5px), var(--guide) calc(50% - 0.5px), var(--guide) calc(50% + 0.5px), transparent calc(50% + 0.5px));
+}
+
 @layer base {
   ::selection {
     background-color: color-mix(in oklab, var(--color-shu) 20%, transparent);

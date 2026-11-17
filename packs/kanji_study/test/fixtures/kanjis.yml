@@ -1,0 +1,23 @@
+_fixture:
+  model_class: KanjiStudy::Kanji
+
+# Completo: significado, lecturas, mnemotecnia y lección.
+taberu:
+  character: 食
+  plan_week: s1
+  position: 1
+  lesson: l01
+  meaning_es: comer
+  mnemonic: Un techo sobre algo bueno para comer.
+
+# Kanji de referencia: sin semana ni lecturas.
+hito:
+  character: 人
+  meaning_es: persona
+
+# Su lección (L08) queda fuera del rango de S5 (L09–L11).
+aida:
+  character: 間
+  plan_week: s5
+  position: 1
+  lesson: l08

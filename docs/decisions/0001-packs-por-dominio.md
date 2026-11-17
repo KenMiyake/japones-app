@@ -73,4 +73,12 @@ app/             layout, estilos y lo transversal
 - Hay que configurar Tailwind para que escanee `packs/**/app/views` además de `app/views`.
 - Los tests viven dentro de cada pack (`packs/kanji_study/test/`) y se corren junto con
   los de la app.
-- Las rutas de cada pack se definen en el `config/routes.rb` principal, agrupadas por pack.
+- Las rutas de cada pack viven en `packs/<pack>/config/routes/<pack>.rb` y se cargan con
+  `draw(:<pack>)` en `config/routes.rb`.
+- Cuando `core` necesita mostrar algo de un dominio (por ejemplo, los kanji en la página
+  de una semana), ofrece un **punto de extensión** en vez de depender del dominio:
+  `PlanWeekSections`, donde cada pack registra su partial. Las claves foráneas desde los
+  dominios hacia `core` usan `on_delete: :nullify`, para que `core` pueda borrar semanas
+  o lecciones sin conocer las tablas que las referencian.
+- `packs-rails` no integra Minitest: `config/boot.rb` define `DEFAULT_TEST` para que
+  `bin/rails test` incluya `packs/*/test`, y `test_helper.rb` agrega sus fixtures.

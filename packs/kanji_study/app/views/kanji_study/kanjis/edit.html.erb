@@ -1,0 +1,5 @@
+<% content_for :title, "Editar #{@kanji.character_was}" %>
+<% content_for :breadcrumbs, breadcrumbs([ "Kanji", kanjis_path ], [ @kanji.character_was, kanji_path(@kanji) ], [ "Editar" ]) %>
+
+<%= render "shared/page_header", kanji: "編集", reading: "へんしゅう", title: "Editar #{@kanji.character_was}" %>
+<%= render "form", kanji: @kanji %>

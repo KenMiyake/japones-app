@@ -1,0 +1,46 @@
+<% content_for :title, "Kanji · Japonés" %>
+<% content_for :breadcrumbs, breadcrumbs([ "Kanji" ]) %>
+
+<%= render "shared/page_header", kanji: "漢字", reading: "かんじ", title: "Kanji",
+           subtitle: "Todos los kanji del plan y los de referencia." %>
+
+<%# El filtro y la lista viven en un Turbo Frame: cambiar de semana solo reemplaza esta parte. %>
+<%= turbo_frame_tag "kanji_list" do %>
+  <div class="mb-8 flex flex-wrap items-center justify-between gap-4">
+  <nav aria-label="Filtrar por semana" class="flex flex-wrap gap-1.5">
+    <% filters = [ [ "Todos", nil ] ] + @plan_weeks.map { |w| [ w.code, w.code ] } + [ [ "Sin semana", "none" ] ] %>
+    <% filters.each do |label, value| %>
+      <% active = @filter == value %>
+      <%= link_to label, kanjis_path(week: value), data: { turbo_action: "advance" },
+            "aria-current": (active ? "page" : nil),
+            class: [ "rounded-full px-3.5 py-1 text-sm transition-colors duration-200",
+                     active ? "bg-sumi text-washi" : "text-nezumi hover:bg-sumi/[0.06] hover:text-sumi" ] %>
+    <% end %>
+  </nav>
+  <%= link_to "Nuevo kanji", new_kanji_path(week: @filter.presence_in(@plan_weeks.map(&:code))),
+        data: { turbo_frame: "_top" }, class: ui_button_class(:primary) %>
+  </div>
+
+  <% if @kanjis.empty? %>
+    <p class="rounded-md border border-dashed border-sumi/20 p-8 text-nezumi">No hay kanji en esta vista.</p>
+  <% else %>
+    <% @kanjis.group_by(&:plan_week).each do |week, kanjis| %>
+      <section class="mb-10">
+        <h2 class="mb-4 flex items-baseline gap-3">
+          <% if week %>
+            <%= link_to week.code, plan_week_path(week), data: { turbo_frame: "_top" },
+                  class: "font-kanji text-lg font-bold tracking-wide hover:text-shu" %>
+            <span class="text-sm text-nezumi"><%= week.lessons_label %></span>
+          <% else %>
+            <span class="font-kanji text-lg font-bold tracking-wide">Sin semana</span>
+            <span class="text-sm text-nezumi">kanji de referencia</span>
+          <% end %>
+          <span class="ml-auto text-xs text-nezumi"><%= kanjis.size %> kanji</span>
+        </h2>
+        <div class="grid grid-cols-4 gap-3 sm:grid-cols-6 md:grid-cols-8 xl:grid-cols-10" data-turbo-frame="_top">
+          <%= render partial: "kanji_study/kanjis/kanji", collection: kanjis, as: :kanji %>
+        </div>
+      </section>
+    <% end %>
+  <% end %>
+<% end %>

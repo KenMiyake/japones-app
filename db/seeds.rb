@@ -4,3 +4,6 @@
 plan = PlanSeeder.call
 puts "Lecciones creadas: #{plan.lessons_created}"
 puts "Semanas del plan creadas: #{plan.weeks_created}"
+
+kanji = KanjiStudy::PlanKanjiSeeder.call
+puts "Kanji creados: #{kanji.created} (ya existían: #{kanji.skipped})"

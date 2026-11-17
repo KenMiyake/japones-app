@@ -1,0 +1,76 @@
+<%# locals: (kanji:) %>
+<%= form_with model: kanji, url: (kanji.new_record? ? kanjis_path : kanji_path(kanji)), class: "max-w-3xl" do |f| %>
+  <%= render "shared/form_errors", record: kanji %>
+
+  <div class="grid gap-8 sm:grid-cols-[10rem_1fr]">
+    <div>
+      <%= f.label :character, class: ui_label_class %>
+      <%= f.text_field :character, maxlength: 1, autofocus: kanji.new_record?, required: true,
+            autocomplete: "off", "aria-invalid": kanji.errors[:character].any?,
+            class: ui_input_class("kanji-guide aspect-square text-center font-kanji text-7xl!") %>
+    </div>
+
+    <div class="space-y-5">
+      <div>
+        <%= f.label :meaning_es, class: ui_label_class %>
+        <%= f.text_field :meaning_es, placeholder: "comer, comida", class: ui_input_class %>
+      </div>
+      <div class="grid gap-5 sm:grid-cols-3">
+        <div>
+          <%= f.label :plan_week_id, KanjiStudy::Kanji.human_attribute_name(:plan_week), class: ui_label_class %>
+          <%= f.select :plan_week_id, plan_week_options, { include_blank: "Sin semana" }, class: ui_input_class %>
+        </div>
+        <div>
+          <%= f.label :position, class: ui_label_class %>
+          <%= f.number_field :position, min: 1, class: ui_input_class %>
+        </div>
+        <div>
+          <%= f.label :lesson_id, KanjiStudy::Kanji.human_attribute_name(:lesson), class: ui_label_class %>
+          <%= f.select :lesson_id, lesson_options, { include_blank: "Sin lección" }, class: ui_input_class %>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <%# Lecturas: filas que se agregan y quitan con el controlador nested-form %>
+  <fieldset class="mt-10" data-controller="nested-form">
+    <legend class="mb-1 font-kanji text-lg font-bold tracking-wide">Lecturas</legend>
+    <p class="mb-4 text-sm text-nezumi">On en katakana (ショク); kun en hiragana, con el okurigana aparte (た + べる).</p>
+
+    <div class="hidden grid-cols-[6rem_1fr_1fr_auto_2.5rem] gap-3 px-1 text-xs text-nezumi sm:grid" aria-hidden="true">
+      <span>Tipo</span><span>Lectura</span><span>Okurigana</span><span>Minna</span><span></span>
+    </div>
+
+    <div data-nested-form-target="list" class="space-y-2">
+      <%= f.fields_for :readings do |reading_form| %>
+        <%= render "kanji_study/kanjis/reading_fields", f: reading_form %>
+      <% end %>
+    </div>
+
+    <template data-nested-form-target="template">
+      <%= f.fields_for :readings, KanjiStudy::KanjiReading.new(kind: "kun"), child_index: "NEW_RECORD" do |reading_form| %>
+        <%= render "kanji_study/kanjis/reading_fields", f: reading_form %>
+      <% end %>
+    </template>
+
+    <button type="button" data-action="nested-form#add" class="<%= ui_button_class(:ghost, "mt-3") %>">
+      <span aria-hidden="true">＋</span> Agregar lectura
+    </button>
+  </fieldset>
+
+  <div class="mt-10 grid gap-5">
+    <div>
+      <%= f.label :mnemonic, class: ui_label_class %>
+      <%= f.text_area :mnemonic, rows: 3, placeholder: "La historia o clave para recordarlo…", class: ui_input_class %>
+    </div>
+    <div>
+      <%= f.label :notes, class: ui_label_class %>
+      <%= f.text_area :notes, rows: 2, class: ui_input_class %>
+    </div>
+  </div>
+
+  <div class="mt-10 flex items-center gap-3 border-t border-sumi/10 pt-6">
+    <%= f.submit (kanji.new_record? ? "Crear kanji" : "Guardar cambios"), class: ui_button_class(:primary) %>
+    <%= link_to "Cancelar", (kanji.new_record? ? kanjis_path : kanji_path(kanji)), class: ui_button_class(:ghost) %>
+  </div>
+<% end %>
