@@ -46,7 +46,7 @@ module KanjiStudy
     private
 
     def set_kanji
-      @kanji = Kanji.includes(:readings, :plan_week, :lesson).find_by!(character: params[:id])
+      @kanji = Kanji.includes(:readings, :plan_week, :lesson, :known_mark).find_by!(character: params[:id])
     end
 
     def filtered_kanjis

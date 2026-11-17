@@ -1,0 +1,5 @@
+<%# locals: (week:) -%>
+<% known, total = known_counts(week:) %>
+<span id="known_week_count_<%= known_week_key(week) %>" class="text-xs text-nezumi">
+  <span class="<%= "text-shu" if known.positive? && known == total %>"><%= known %></span> / <%= total %>
+</span>

@@ -23,8 +23,11 @@
     <h1 class="mt-2 font-kanji text-3xl font-bold tracking-wide <%= "text-sumi/30" unless @kanji.meaning_es %>">
       <%= @kanji.meaning_es || "Sin significado" %>
     </h1>
-    <% if @kanji.missing_fields.any? %>
-      <div class="mt-3 flex flex-wrap gap-1.5"><%= missing_field_badges(@kanji) %></div>
+    <% if @kanji.known? || @kanji.missing_fields.any? %>
+      <div class="mt-3 flex flex-wrap gap-1.5">
+        <%= badge "sabido desde el #{l(@kanji.known_mark.marked_on, format: '%-d %b')}", tone: :accent if @kanji.known? %>
+        <%= missing_field_badges(@kanji) %>
+      </div>
     <% end %>
     <div class="mt-6 h-px w-16 bg-sumi/20"></div>
 

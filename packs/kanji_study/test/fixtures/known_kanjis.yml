@@ -1,0 +1,6 @@
+_fixture:
+  model_class: KanjiStudy::KnownKanji
+
+hito:
+  kanji: hito
+  marked_on: 2026-11-16

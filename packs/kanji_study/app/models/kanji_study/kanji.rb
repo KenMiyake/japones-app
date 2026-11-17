@@ -8,6 +8,7 @@ module KanjiStudy
     belongs_to :lesson, optional: true
     has_many :readings, -> { order(:position, :id) },
              class_name: "KanjiStudy::KanjiReading", inverse_of: :kanji, dependent: :destroy
+    has_one :known_mark, class_name: "KanjiStudy::KnownKanji", inverse_of: :kanji, dependent: :destroy
 
     accepts_nested_attributes_for :readings, allow_destroy: true,
                                              reject_if: ->(attrs) { attrs["kana"].blank? && attrs["okurigana"].blank? }
@@ -62,6 +63,10 @@ module KanjiStudy
 
     def complete?
       missing_fields.empty?
+    end
+
+    def known?
+      known_mark.present?
     end
 
     private

@@ -9,7 +9,7 @@ module NavigationHelper
       NavItem.new("言葉", "Palabras", nil),
       NavItem.new("部品", "Piezas", nil),
       NavItem.new("区別", "Distinguir", nil),
-      NavItem.new("既知", "Sabidos", nil)
+      NavItem.new("既知", "Sabidos", known_kanjis_path)
     ]
   end
 

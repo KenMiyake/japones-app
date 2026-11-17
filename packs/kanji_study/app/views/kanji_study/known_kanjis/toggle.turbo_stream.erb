@@ -1,0 +1,7 @@
+<%# Respuesta a marcar/desmarcar un kanji: actualiza su ficha y los contadores.
+    method: :morph conserva el foco y deja que la barra de progreso anime su ancho. %>
+<%= turbo_stream.replace dom_id(@kanji, :known), method: :morph,
+      partial: "kanji_study/known_kanjis/tile", locals: { kanji: @kanji } %>
+<%= turbo_stream.replace "known_week_count_#{known_week_key(@kanji.plan_week)}", method: :morph,
+      partial: "kanji_study/known_kanjis/week_count", locals: { week: @kanji.plan_week } %>
+<%= turbo_stream.replace "known_counter", method: :morph, partial: "kanji_study/known_kanjis/counter" %>

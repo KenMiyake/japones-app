@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.1].define(version: 2026_11_17_023710) do
+ActiveRecord::Schema[8.1].define(version: 2026_11_17_030536) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_catalog.plpgsql"
 
@@ -44,6 +44,14 @@ ActiveRecord::Schema[8.1].define(version: 2026_11_17_023710) do
     t.index ["plan_week_id"], name: "index_kanjis_on_plan_week_id"
   end
 
+  create_table "known_kanjis", force: :cascade do |t|
+    t.bigint "kanji_id", null: false
+    t.date "marked_on", default: -> { "CURRENT_DATE" }, null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["kanji_id"], name: "index_known_kanjis_on_kanji_id", unique: true
+  end
+
   create_table "lessons", force: :cascade do |t|
     t.integer "number", null: false
     t.string "title"
@@ -70,4 +78,5 @@ ActiveRecord::Schema[8.1].define(version: 2026_11_17_023710) do
   add_foreign_key "kanji_readings", "kanjis", on_delete: :cascade
   add_foreign_key "kanjis", "lessons", on_delete: :nullify
   add_foreign_key "kanjis", "plan_weeks", on_delete: :nullify
+  add_foreign_key "known_kanjis", "kanjis", on_delete: :cascade
 end

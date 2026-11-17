@@ -1,0 +1,21 @@
+<%# Una semana de la cuadrícula. locals: (week:, kanjis:) -%>
+<section id="known_week_<%= known_week_key(week) %>" class="mb-10">
+  <div class="mb-4 flex flex-wrap items-baseline gap-3">
+    <h2 class="font-kanji text-lg font-bold tracking-wide"><%= week&.code || "Sin semana" %></h2>
+    <span class="text-sm text-nezumi"><%= week ? week.lessons_label : "kanji de referencia" %></span>
+    <%= render "kanji_study/known_kanjis/week_count", week: %>
+
+    <% if week %>
+      <div class="ml-auto flex gap-1">
+        <%= button_to "Marcar todos", plan_week_known_marks_path(week), method: :post,
+              class: "rounded px-2 py-1 text-xs text-nezumi transition-colors hover:bg-sumi/[0.05] hover:text-sumi" %>
+        <%= button_to "Desmarcar", plan_week_known_marks_path(week), method: :delete,
+              class: "rounded px-2 py-1 text-xs text-nezumi transition-colors hover:bg-sumi/[0.05] hover:text-sumi" %>
+      </div>
+    <% end %>
+  </div>
+
+  <div class="grid grid-cols-5 gap-2.5 sm:grid-cols-8 md:grid-cols-10 xl:grid-cols-12">
+    <%= render partial: "kanji_study/known_kanjis/tile", collection: kanjis, as: :kanji %>
+  </div>
+</section>

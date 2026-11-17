@@ -1,0 +1,17 @@
+<%# Ficha que alterna sabido / no sabido. Al marcarla aparece el sello 済 (hecho). %>
+<%# locals: (kanji:) -%>
+<div id="<%= dom_id(kanji, :known) %>">
+  <%= button_to kanji_known_mark_path(kanji), method: (kanji.known? ? :delete : :post),
+        "aria-pressed": kanji.known?,
+        title: (kanji.known? ? "Sabido desde el #{l(kanji.known_mark.marked_on, format: :long)}. Clic para desmarcar." : "Marcar como sabido"),
+        class: [ "group/known relative grid aspect-square w-full place-items-center rounded-md border transition duration-200 ease-out",
+                 "focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-shu/40 motion-reduce:transition-none",
+                 kanji.known? ? "border-shu/30 bg-white text-sumi" : "border-sumi/10 bg-white/40 text-sumi/35 hover:border-sumi/25 hover:bg-white hover:text-sumi" ] do %>
+    <span class="font-kanji text-3xl leading-none"><%= kanji.character %></span>
+    <% if kanji.known? %>
+      <span aria-hidden="true"
+            class="absolute bottom-1.5 right-1.5 grid size-5 -rotate-12 place-items-center rounded-[2px] bg-shu font-kanji text-[11px] leading-none text-washi
+                   transition duration-300 ease-out starting:rotate-12 starting:scale-[1.8] starting:opacity-0 motion-reduce:transition-none">済</span>
+    <% end %>
+  <% end %>
+</div>

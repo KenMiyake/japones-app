@@ -1,0 +1,15 @@
+<% content_for :title, "Kanji sabidos · Japonés" %>
+<% content_for :breadcrumbs, breadcrumbs([ "Kanji sabidos" ]) %>
+
+<%= render "shared/page_header", kanji: "既知", reading: "きち", title: "Kanji sabidos",
+           subtitle: "Toca un kanji para marcarlo como sabido. Será el punto de partida del repaso." %>
+
+<%= render "kanji_study/known_kanjis/counter" %>
+
+<% if @kanjis_by_week.empty? %>
+  <p class="rounded-md border border-dashed border-sumi/20 p-8 text-nezumi">Todavía no hay kanji.</p>
+<% else %>
+  <% @kanjis_by_week.each do |week, kanjis| %>
+    <%= render "kanji_study/known_kanjis/week", week:, kanjis: %>
+  <% end %>
+<% end %>

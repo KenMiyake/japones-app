@@ -1,0 +1,4 @@
+<%# Respuesta a marcar/desmarcar una semana completa: actualiza la sección y el total. %>
+<%= turbo_stream.replace "known_week_#{@plan_week.code}", method: :morph,
+      partial: "kanji_study/known_kanjis/week", locals: { week: @plan_week, kanjis: @kanjis } %>
+<%= turbo_stream.replace "known_counter", method: :morph, partial: "kanji_study/known_kanjis/counter" %>

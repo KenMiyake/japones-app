@@ -1,0 +1,13 @@
+<%# Progreso total de kanji sabidos. %>
+<% known, total = known_counts %>
+<div id="known_counter" class="mb-10 max-w-md">
+  <p class="text-sm text-nezumi">
+    <span class="font-kanji text-2xl font-bold text-sumi"><%= known %></span>
+    de <%= total %> kanji sabidos
+  </p>
+  <div class="mt-3 h-[3px] overflow-hidden rounded-full bg-sumi/10" role="progressbar"
+       aria-valuemin="0" aria-valuemax="<%= total %>" aria-valuenow="<%= known %>" aria-label="Kanji sabidos">
+    <div class="h-full rounded-full bg-shu transition-[width] duration-500 ease-out motion-reduce:transition-none"
+         style="width: <%= total.zero? ? 0 : (known * 100.0 / total).round(1) %>%"></div>
+  </div>
+</div>
