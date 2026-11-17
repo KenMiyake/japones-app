@@ -27,8 +27,10 @@ module KanjiStudy
     normalizes :character, with: ->(value) { value.strip }
     normalizes :meaning_es, :mnemonic, :notes, with: ->(value) { value.strip.presence }
 
-    before_validation :number_readings
+    before_validation :apply_readings_text, if: -> { @readings_text }
+    before_validation :number_readings, unless: -> { @readings_text }
     after_save :relink_words, if: :saved_change_to_character?
+    after_save { @readings_text = nil }
     before_save :sync_components, if: -> { @component_tokens }
     after_save :forget_component_tokens
 
@@ -41,6 +43,21 @@ module KanjiStudy
     }
     scope :in_plan_week, ->(week) { where(plan_week: week) }
     scope :without_plan_week, -> { where(plan_week_id: nil) }
+
+    # Lo que falta completar (ver missing_fields). Se combinan con `or` en `incomplete`.
+    scope :missing_meaning_es, -> { where(meaning_es: nil) }
+    scope :missing_readings, -> { where.not(id: KanjiReading.select(:kanji_id)) }
+    scope :missing_mnemonic, -> { where(mnemonic: nil) }
+    scope :missing_lesson, -> { where(lesson_id: nil) }
+    scope :incomplete, -> { missing_meaning_es.or(missing_readings).or(missing_mnemonic).or(missing_lesson) }
+
+    MISSING_FIELDS = %i[meaning_es readings mnemonic lesson].freeze
+
+    def self.missing(field)
+      raise ArgumentError, "campo desconocido: #{field}" unless MISSING_FIELDS.include?(field.to_sym)
+
+      public_send(:"missing_#{field}")
+    end
 
     # URLs con el propio kanji: /kanjis/日
     def to_param
@@ -79,6 +96,26 @@ module KanjiStudy
 
     def known?
       known_mark.present?
+    end
+
+    # Lecturas como texto, para completarlas rápido: on "ショク、ジキ", kun "た.べる、く.う"
+    # (el punto separa el okurigana). Al guardar se conservan las lecturas que ya existían
+    # (con su marca "la enseña Minna"), se agregan las nuevas y se quitan las que faltan.
+    def on_readings_text
+      @readings_text&.fetch("on", nil) || on_readings.map(&:kana).join("、")
+    end
+
+    def kun_readings_text
+      @readings_text&.fetch("kun", nil) ||
+        kun_readings.map { |r| [ r.kana, r.okurigana ].compact.join(".") }.join("、")
+    end
+
+    def on_readings_text=(text)
+      (@readings_text ||= {})["on"] = text.to_s
+    end
+
+    def kun_readings_text=(text)
+      (@readings_text ||= {})["kun"] = text.to_s
     end
 
     # Piezas como texto (carácter o nombre), tal como se escriben en el formulario.
@@ -121,6 +158,35 @@ module KanjiStudy
 
       @component_tokens = nil
       association(:components).reset
+    end
+
+    # Aplica on_readings_text / kun_readings_text: reutiliza las lecturas iguales, crea las
+    # nuevas, marca para borrar las que ya no están y numera en el orden escrito (on, luego kun).
+    def apply_readings_text
+      position = 0
+      %w[on kun].each do |kind|
+        current = readings.select { |r| r.kind == kind && !r.marked_for_destruction? }
+        list = if @readings_text.key?(kind)
+          wanted = parse_readings_text(@readings_text[kind])
+          kept = wanted.map do |kana, okurigana|
+            current.find { |r| r.kana == kana && r.okurigana == okurigana } ||
+              readings.build(kind:, kana:, okurigana:)
+          end.uniq
+          (current - kept).each(&:mark_for_destruction)
+          kept
+        else
+          current
+        end
+        list.each { |reading| reading.position = (position += 1) - 1 }
+      end
+    end
+
+    # "た.べる、く.う" → [["た", "べる"], ["く", "う"]]
+    def parse_readings_text(text)
+      text.split(/[、,，\s]+/).compact_blank.map do |token|
+        kana, okurigana = token.split(".", 2)
+        [ kana.delete("・"), okurigana.presence ]
+      end.uniq
     end
 
     # Las lecturas quedan en el orden en que aparecen en el formulario.
