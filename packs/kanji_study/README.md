@@ -23,7 +23,7 @@ Kanji, Word            → Lesson (core, opcional)
 
 | Modelo | Reglas principales |
 |---|---|
-| `Kanji` | Un solo carácter Han, único. Semana y lección opcionales; si la lección queda fuera del rango de la semana, solo se avisa (`lesson_outside_plan_week?`). `missing_fields` dice qué falta (significado, lecturas, mnemotecnia, lección). URL: `/kanjis/食`. |
+| `Kanji` | Un solo carácter Han, único. Semana y lección opcionales; si la lección queda fuera del rango de la semana, solo se avisa (`lesson_outside_plan_week?`). `missing_fields` dice qué falta (significado, lecturas, mnemotecnia, lección). URL: `/kanjis/食`. Scopes `incomplete` y `missing(:campo)`. Lecturas como texto con `on_readings_text` / `kun_readings_text` (conserva las existentes y su marca de Minna). |
 | `KanjiReading` | `kind` on/kun. On en katakana, kun en hiragana; el okurigana va aparte y solo en kun. `taught`: si la enseña Minna. Se editan anidadas en el formulario del kanji. |
 | `Word` | Texto + lectura (solo kana), única por combinación (今日 きょう / こんにち). Al guardarse se enlaza con los kanji registrados que contiene; `unregistered_kanji` lista los que faltan. Crear o renombrar un kanji vuelve a enlazar las palabras afectadas. |
 | `Component` | Pieza: carácter (亻), nombre propio ("techo") o ambos; los dos únicos. En el kanji se asignan con `component_tokens` (texto); las que no existen se crean al guardar (`created_components`). |
@@ -37,6 +37,7 @@ Al eliminar una pieza, una palabra o un grupo, los kanji no se tocan.
 
 | Sidebar | Rutas | Qué hace |
 |---|---|---|
+| 未完 Pendientes | `resources :pending_kanjis, path: "pending", only: %i[index show edit update]` | Kanji incompletos con filtros (semana, por defecto la actual; lección; lo que falta) y edición en la misma fila. Las lecturas se escriben como texto: on `ショク、ジキ`, kun `た.べる、く.う` |
 | 漢字 Kanji | `resources :kanjis` | Listado por semana con filtro (Turbo Frame), ficha (lecturas, piezas, palabras, grupos, estado de sabido) y formulario con lecturas anidadas y piezas como chips |
 | 言葉 Palabras | `resources :words, except: :show` | Listado con búsqueda mientras se escribe y formulario. Desde la ficha de un kanji se puede crear una palabra que vuelve a esa ficha (`return_to_kanji`) |
 | 部品 Piezas | `resources :components, except: :show` | Tarjetas de piezas con los kanji que las usan |
@@ -47,6 +48,8 @@ Al eliminar una pieza, una palabra o un grupo, los kanji no se tocan.
 
 | Dónde | Técnica |
 |---|---|
+| Pendientes: filtros y lista | Turbo Frame `pending_list` (los filtros conservan los demás con `PendingQuery#to_params`) |
+| Pendientes: completar en la fila | Turbo Frame por fila (`edit` devuelve el formulario en el mismo frame) + Turbo Streams con morph al guardar (`pending_kanjis/update.turbo_stream.erb`) |
 | Filtro de semana en Kanji | Turbo Frame `kanji_list` + `data-turbo-action="advance"` (actualiza la URL) |
 | Búsqueda de palabras | Turbo Frame `words_list` + controlador `search` (debounce de 250 ms) |
 | Lecturas en el formulario del kanji | Controlador `nested-form` (`<template>` + `_destroy`) |
