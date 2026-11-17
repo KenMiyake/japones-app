@@ -1,0 +1,32 @@
+<%# Fila de un kanji pendiente (dentro de su propio Turbo Frame). %>
+<%# locals: (kanji:, query:) -%>
+<%= turbo_frame_tag dom_id(kanji, :pending), class: "block border-b border-sumi/10" do %>
+  <div class="grid grid-cols-[3.5rem_1fr] items-start gap-x-5 gap-y-3 py-4 sm:grid-cols-[3.5rem_1fr_auto]">
+    <%= link_to kanji.character, kanji_path(kanji), data: { turbo_frame: "_top" }, title: "Abrir la ficha",
+          class: "font-kanji text-4xl leading-none transition-colors hover:text-shu" %>
+
+    <div class="min-w-0 space-y-1 text-sm">
+      <p class="<%= kanji.meaning_es ? "font-medium" : "text-sumi/30" %>"><%= kanji.meaning_es || "Sin significado" %></p>
+      <p class="flex flex-wrap gap-x-4 text-nezumi" lang="ja">
+        <span><span class="text-[10px] uppercase tracking-widest">On</span>
+          <%= kanji.on_readings.any? ? kanji.on_readings_text : "—" %></span>
+        <span><span class="text-[10px] uppercase tracking-widest">Kun</span>
+          <%= kanji.kun_readings.any? ? kanji.kun_readings_text : "—" %></span>
+        <span><%= kanji.lesson&.code || "sin lección" %></span>
+      </p>
+      <% if kanji.mnemonic %>
+        <p class="truncate text-sumi/60"><%= kanji.mnemonic %></p>
+      <% end %>
+    </div>
+
+    <div class="col-span-2 flex flex-wrap items-center gap-2 sm:col-span-1 sm:justify-end">
+      <% if kanji.complete? %>
+        <%= badge "completo", tone: :success %>
+      <% else %>
+        <%= missing_field_badges(kanji) %>
+      <% end %>
+      <%= link_to (kanji.complete? ? "Editar" : "Completar"), edit_pending_kanji_path(kanji, query.to_params),
+            class: ui_button_class(:secondary, "px-3! py-1.5! text-xs!") %>
+    </div>
+  </div>
+<% end %>

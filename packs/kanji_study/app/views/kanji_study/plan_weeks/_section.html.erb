@@ -7,6 +7,10 @@
     <span class="text-xs text-nezumi">
       <%= kanjis.size %> · <%= kanjis.count(&:complete?) %> completos
     </span>
+    <% if kanjis.any? { |kanji| !kanji.complete? } %>
+      <%= link_to "Completar pendientes →", pending_kanjis_path(week: plan_week.code),
+            class: "text-xs text-kincha transition-colors hover:text-shu print:hidden" %>
+    <% end %>
     <%= link_to "＋ Agregar", new_kanji_path(week: plan_week.code),
           class: "ml-auto text-sm text-nezumi transition-colors hover:text-shu print:hidden" %>
   </div>

@@ -1,0 +1,45 @@
+<% content_for :title, "Pendientes · Japonés" %>
+<% content_for :breadcrumbs, breadcrumbs([ "Pendientes" ]) %>
+
+<%= render "shared/page_header", kanji: "未完", reading: "みかん", title: "Pendientes",
+           subtitle: "Lo que falta completar de cada kanji. Complétalo aquí mismo, fila por fila." %>
+
+<%# Filtros, resumen y lista viven en un Turbo Frame: cambiar un filtro reemplaza solo esto. %>
+<%= turbo_frame_tag "pending_list", data: { turbo_action: "advance" } do %>
+  <div class="mb-6 space-y-4">
+    <nav aria-label="Filtrar por semana" class="flex flex-wrap gap-1.5">
+      <% filters = [ [ "Todas", "all" ] ] + @plan_weeks.map { |w| [ w.code, w.code ] } + [ [ "Sin semana", "none" ] ] %>
+      <% filters.each do |label, value| %>
+        <% active = @query.week == value %>
+        <%= link_to label, pending_kanjis_path(@query.to_params(week: value, lesson: nil)),
+              "aria-current": (active ? "page" : nil),
+              class: [ "rounded-full px-3.5 py-1 text-sm transition-colors duration-200",
+                       active ? "bg-sumi text-washi" : "text-nezumi hover:bg-sumi/[0.06] hover:text-sumi" ] %>
+      <% end %>
+    </nav>
+
+    <%= form_with url: pending_kanjis_path, method: :get, class: "flex flex-wrap items-center gap-3",
+          data: { controller: "search", search_delay_value: 0 } do |f| %>
+      <%= hidden_field_tag :week, @query.week %>
+      <%= hidden_field_tag :missing, @query.missing if @query.missing %>
+      <%= f.select :lesson, lesson_number_options,
+            { include_blank: "Todas las lecciones", selected: @query.lesson },
+            "aria-label": "Filtrar por lección", data: { action: "change->search#submit" },
+            class: ui_input_class("w-56!") %>
+    <% end %>
+  </div>
+
+  <%= render "kanji_study/pending_kanjis/summary", query: @query %>
+
+  <% kanjis = @query.kanjis %>
+  <% if kanjis.empty? %>
+    <div class="rounded-md border border-dashed border-sumi/20 p-10 text-center">
+      <p class="font-kanji text-3xl text-matcha">完了</p>
+      <p class="mt-2 text-nezumi">No queda nada pendiente con estos filtros.</p>
+    </div>
+  <% else %>
+    <div class="border-t border-sumi/10">
+      <%= render partial: "kanji_study/pending_kanjis/row", collection: kanjis, as: :kanji, locals: { query: @query } %>
+    </div>
+  <% end %>
+<% end %>

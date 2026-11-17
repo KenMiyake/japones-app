@@ -1,0 +1,5 @@
+<%# Tras guardar en la fila: vuelve la fila (con lo nuevo) y se actualiza el resumen. %>
+<%= turbo_stream.replace dom_id(@kanji, :pending), method: :morph,
+      partial: "kanji_study/pending_kanjis/row", locals: { kanji: @kanji, query: @query } %>
+<%= turbo_stream.replace "pending_summary", method: :morph,
+      partial: "kanji_study/pending_kanjis/summary", locals: { query: @query } %>

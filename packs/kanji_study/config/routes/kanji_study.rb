@@ -11,6 +11,9 @@ scope module: :kanji_study do
     resource :practice_mode, only: :update, controller: "confusable_practice_modes"
   end
 
+  # Pendientes: kanji por completar, con edición en la misma fila (/pending, /pending/食/edit)
+  resources :pending_kanjis, path: "pending", only: %i[index show edit update]
+
   # Palabras de ejemplo (se enlazan solas con sus kanji)
   resources :words, except: :show
 

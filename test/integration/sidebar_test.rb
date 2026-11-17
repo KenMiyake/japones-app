@@ -16,7 +16,7 @@ class SidebarTest < ActionDispatch::IntegrationTest
   test "todas las secciones del sidebar son enlaces" do
     get root_path
 
-    assert_select "aside#sidebar nav a", 6
+    assert_select "aside#sidebar nav a", 7
     assert_select "aside#sidebar nav span[aria-disabled=true]", count: 0
   end
 

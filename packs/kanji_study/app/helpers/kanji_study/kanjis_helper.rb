@@ -20,6 +20,11 @@ module KanjiStudy
       Lesson.ordered.map { |lesson| [ [ lesson.code, lesson.title ].compact.join(" · "), lesson.id ] }
     end
 
+    # Para filtrar por lección: el valor es el número (7), no el id.
+    def lesson_number_options
+      Lesson.ordered.map { |lesson| [ [ lesson.code, lesson.title ].compact.join(" · "), lesson.number ] }
+    end
+
     def reading_kind_options
       KanjiReading.kinds.keys.map { |kind| [ t("kanji_study.reading_kinds.#{kind}"), kind ] }
     end

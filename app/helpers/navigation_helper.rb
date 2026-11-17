@@ -5,6 +5,7 @@ module NavigationHelper
   def nav_items
     [
       NavItem.new("計画", "Plan", plan_weeks_path),
+      NavItem.new("未完", "Pendientes", pending_kanjis_path),
       NavItem.new("漢字", "Kanji", kanjis_path),
       NavItem.new("言葉", "Palabras", words_path),
       NavItem.new("部品", "Piezas", components_path),

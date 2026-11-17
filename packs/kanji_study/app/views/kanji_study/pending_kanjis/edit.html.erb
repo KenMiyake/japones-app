@@ -1,0 +1,54 @@
+<%# Formulario compacto que reemplaza la fila (mismo Turbo Frame). %>
+<%= turbo_frame_tag dom_id(@kanji, :pending), class: "block border-b border-sumi/10" do %>
+  <%= form_with model: @kanji, url: pending_kanji_path(@kanji), method: :patch,
+        class: "grid grid-cols-[3.5rem_1fr] gap-x-5 bg-white/60 py-4 pr-4" do |f| %>
+    <% @query.to_params.each do |name, value| %>
+      <%= hidden_field_tag name, value %>
+    <% end %>
+
+    <span class="font-kanji text-4xl leading-none text-shu"><%= @kanji.character_was %></span>
+
+    <div>
+      <% if @kanji.errors.any? %>
+        <p role="alert" class="mb-3 text-sm text-shu"><%= @kanji.errors.full_messages.uniq.to_sentence %></p>
+      <% end %>
+
+      <div class="grid gap-3 sm:grid-cols-6">
+        <div class="sm:col-span-3">
+          <%= f.label :meaning_es, class: ui_label_class %>
+          <%= f.text_field :meaning_es, placeholder: "Significado en español",
+                autofocus: @kanji.meaning_es.blank?, class: ui_input_class %>
+        </div>
+        <div class="sm:col-span-3">
+          <%= f.label :lesson_id, KanjiStudy::Kanji.human_attribute_name(:lesson), class: ui_label_class %>
+          <%= f.select :lesson_id, lesson_options, { include_blank: "Sin lección" }, class: ui_input_class %>
+        </div>
+        <div class="sm:col-span-3">
+          <%= f.label :on_readings_text, "Lecturas on", class: ui_label_class %>
+          <%= f.text_field :on_readings_text, placeholder: "ショク、ジキ", lang: "ja", autocomplete: "off",
+                class: ui_input_class("font-kanji") %>
+        </div>
+        <div class="sm:col-span-3">
+          <%= f.label :kun_readings_text, "Lecturas kun", class: ui_label_class %>
+          <%= f.text_field :kun_readings_text, placeholder: "た.べる、く.う", lang: "ja", autocomplete: "off",
+                class: ui_input_class("font-kanji") %>
+        </div>
+        <div class="sm:col-span-6">
+          <%= f.label :mnemonic, class: ui_label_class %>
+          <%= f.text_area :mnemonic, rows: 2, placeholder: "La historia o clave para recordarlo…", class: ui_input_class %>
+        </div>
+      </div>
+
+      <p class="mt-2 text-xs text-nezumi">
+        Separa las lecturas con 、 o coma. En kun, el punto marca el okurigana (た.べる).
+      </p>
+
+      <div class="mt-4 flex items-center gap-2">
+        <%= f.submit "Guardar", class: ui_button_class(:primary, "px-3! py-1.5!") %>
+        <%= link_to "Cancelar", pending_kanji_path(@kanji, @query.to_params), class: ui_button_class(:ghost, "px-3! py-1.5!") %>
+        <%= link_to "Ficha completa", edit_kanji_path(@kanji), data: { turbo_frame: "_top" },
+              class: "ml-auto text-xs text-nezumi hover:text-sumi" %>
+      </div>
+    </div>
+  <% end %>
+<% end %>
