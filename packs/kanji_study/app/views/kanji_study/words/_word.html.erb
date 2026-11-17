@@ -1,0 +1,14 @@
+<%# Fila de una palabra en el listado. %>
+<%# locals: (word:) -%>
+<li id="<%= dom_id(word) %>" class="group/row grid grid-cols-[minmax(7rem,auto)_1fr_auto] items-baseline gap-x-6 gap-y-1 py-4 sm:grid-cols-[10rem_9rem_1fr_auto]">
+  <span class="font-kanji text-2xl tracking-wide">
+    <% word.text.each_char do |char| %><% kanji = word.kanjis.find { |k| k.character == char } %><% if kanji %><%= link_to char, kanji_path(kanji), data: { turbo_frame: "_top" }, class: "transition-colors hover:text-shu" %><% elsif char.match?(/\p{Han}/) %><span class="text-sumi/40" title="Kanji sin registrar"><%= char %></span><% else %><%= char %><% end %><% end %>
+  </span>
+  <span class="text-sm text-nezumi" lang="ja"><%= word.reading %></span>
+  <span class="col-span-3 text-sm sm:col-span-1 <%= word.meaning_es ? "" : "text-sumi/30" %>">
+    <%= word.meaning_es || "Sin significado" %>
+    <% if word.lesson %><span class="ml-2 text-xs text-nezumi"><%= word.lesson.code %></span><% end %>
+  </span>
+  <%= link_to "Editar", edit_word_path(word), data: { turbo_frame: "_top" },
+        class: "row-start-1 col-start-3 text-xs text-nezumi opacity-60 transition hover:text-sumi group-hover/row:opacity-100 sm:col-start-4" %>
+</li>

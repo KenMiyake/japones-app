@@ -82,6 +82,28 @@
       <% end %>
     </section>
 
+    <section class="mt-8">
+      <div class="mb-3 flex items-baseline gap-3">
+        <h2 class="text-xs font-medium uppercase tracking-[0.2em] text-nezumi">Palabras</h2>
+        <%= link_to "＋ Agregar", new_word_path(text: @kanji.character, return_to_kanji: @kanji.character),
+              class: "ml-auto text-sm text-nezumi transition-colors hover:text-shu print:hidden" %>
+      </div>
+      <% if @kanji.words.any? %>
+        <ul class="divide-y divide-sumi/10 border-y border-sumi/10">
+          <% @kanji.words.sort_by(&:reading).each do |word| %>
+            <li class="flex items-baseline gap-4 py-2.5">
+              <span class="font-kanji text-xl"><%= word_with_highlight(word, @kanji.character) %></span>
+              <span class="text-sm text-nezumi" lang="ja"><%= word.reading %></span>
+              <span class="text-sm"><%= word.meaning_es %></span>
+              <%= link_to "Editar", edit_word_path(word), class: "ml-auto text-xs text-nezumi hover:text-sumi print:hidden" %>
+            </li>
+          <% end %>
+        </ul>
+      <% else %>
+        <p class="text-sm text-sumi/30">Todavía no hay palabras con este kanji.</p>
+      <% end %>
+    </section>
+
     <% if @kanji.confusable_groups.any? %>
       <section class="mt-8">
         <h2 class="mb-3 text-xs font-medium uppercase tracking-[0.2em] text-nezumi">Se confunde con</h2>

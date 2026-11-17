@@ -1,0 +1,33 @@
+<%# locals: (word:) -%>
+<%= form_with model: word, url: (word.new_record? ? words_path : word_path(word)), class: "max-w-2xl" do |f| %>
+  <%= render "shared/form_errors", record: word %>
+  <%= hidden_field_tag :return_to_kanji, params[:return_to_kanji] if params[:return_to_kanji].present? %>
+
+  <div class="grid gap-6 sm:grid-cols-2">
+    <div>
+      <%= f.label :text, class: ui_label_class %>
+      <%= f.text_field :text, required: true, autofocus: word.new_record?, autocomplete: "off", lang: "ja",
+            placeholder: "電車", "aria-invalid": word.errors[:text].any?,
+            class: ui_input_class("font-kanji text-2xl! tracking-wide") %>
+    </div>
+    <div>
+      <%= f.label :reading, class: ui_label_class %>
+      <%= f.text_field :reading, required: true, autocomplete: "off", lang: "ja",
+            placeholder: "でんしゃ", "aria-invalid": word.errors[:reading].any?,
+            class: ui_input_class("font-kanji text-2xl! tracking-wide") %>
+    </div>
+    <div>
+      <%= f.label :meaning_es, class: ui_label_class %>
+      <%= f.text_field :meaning_es, placeholder: "tren", class: ui_input_class %>
+    </div>
+    <div>
+      <%= f.label :lesson_id, KanjiStudy::Word.human_attribute_name(:lesson), class: ui_label_class %>
+      <%= f.select :lesson_id, lesson_options, { include_blank: "Sin lección" }, class: ui_input_class %>
+    </div>
+  </div>
+
+  <div class="mt-10 flex items-center gap-3 border-t border-sumi/10 pt-6">
+    <%= f.submit (word.new_record? ? "Crear palabra" : "Guardar cambios"), class: ui_button_class(:primary) %>
+    <%= link_to "Cancelar", words_path, class: ui_button_class(:ghost) %>
+  </div>
+<% end %>

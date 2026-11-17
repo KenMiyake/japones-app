@@ -10,7 +10,15 @@ es:
       kanji_study/confusable_group:
         one: Grupo para distinguir
         other: Grupos para distinguir
+      kanji_study/word:
+        one: Palabra
+        other: Palabras
     attributes:
+      kanji_study/word:
+        text: Palabra
+        reading: Lectura
+        meaning_es: Significado
+        lesson: Lección de Minna
       kanji_study/kanji:
         character: Kanji
         plan_week: Semana del plan
@@ -49,6 +57,11 @@ es:
             okurigana:
               only_for_kun: solo corresponde a lecturas kun
               hiragana_required: va en hiragana
+        kanji_study/word:
+          attributes:
+            reading:
+              kana_only: "va solo en kana (ej.: でんしゃ)"
+              taken: ya existe para esta palabra
         kanji_study/confusable_group:
           attributes:
             characters:

@@ -1,0 +1,14 @@
+_fixture:
+  model_class: KanjiStudy::Word
+
+# 食 está registrado; 事 no (queda sin enlazar).
+shokuji:
+  text: 食事
+  reading: しょくじ
+  meaning_es: comida
+  lesson: l01
+
+hito:
+  text: 人
+  reading: ひと
+  meaning_es: persona

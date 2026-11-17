@@ -1,0 +1,29 @@
+<% content_for :title, "Palabras · Japonés" %>
+<% content_for :breadcrumbs, breadcrumbs([ "Palabras" ]) %>
+
+<div class="flex flex-wrap items-start justify-between gap-4">
+  <%= render "shared/page_header", kanji: "言葉", reading: "ことば", title: "Palabras",
+             subtitle: "Palabras de ejemplo. Se enlazan solas con los kanji que contienen." %>
+  <%= link_to "Nueva palabra", new_word_path, class: ui_button_class(:primary, "mt-8") %>
+</div>
+
+<%# Buscar mientras se escribe: el formulario (GET) actualiza solo el frame de la lista. %>
+<%= form_with url: words_path, method: :get, class: "mb-8 max-w-md",
+      data: { controller: "search", turbo_frame: "words_list", turbo_action: "advance" } do |f| %>
+  <%= f.search_field :q, value: @query, placeholder: "Buscar por palabra, lectura o significado…",
+        autocomplete: "off", "aria-label": "Buscar palabras",
+        data: { action: "input->search#submit" }, class: ui_input_class %>
+<% end %>
+
+<%= turbo_frame_tag "words_list" do %>
+  <% if @words.empty? %>
+    <p class="rounded-md border border-dashed border-sumi/20 p-8 text-nezumi">
+      <%= @query.present? ? "No hay palabras que coincidan con «#{@query}»." : "Todavía no hay palabras." %>
+    </p>
+  <% else %>
+    <p class="mb-2 text-xs text-nezumi"><%= pluralize(@words.size, "palabra", plural: "palabras") %></p>
+    <ul class="divide-y divide-sumi/10 border-y border-sumi/10">
+      <%= render partial: "kanji_study/words/word", collection: @words, as: :word %>
+    </ul>
+  <% end %>
+<% end %>

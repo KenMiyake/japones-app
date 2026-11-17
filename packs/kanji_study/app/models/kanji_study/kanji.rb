@@ -11,6 +11,8 @@ module KanjiStudy
     has_one :known_mark, class_name: "KanjiStudy::KnownKanji", inverse_of: :kanji, dependent: :destroy
     has_many :confusable_members, class_name: "KanjiStudy::ConfusableMember", inverse_of: :kanji, dependent: :destroy
     has_many :confusable_groups, through: :confusable_members
+    has_many :word_kanjis, class_name: "KanjiStudy::WordKanji", inverse_of: :kanji, dependent: :destroy
+    has_many :words, through: :word_kanjis
 
     accepts_nested_attributes_for :readings, allow_destroy: true,
                                              reject_if: ->(attrs) { attrs["kana"].blank? && attrs["okurigana"].blank? }
@@ -23,6 +25,7 @@ module KanjiStudy
     normalizes :meaning_es, :mnemonic, :notes, with: ->(value) { value.strip.presence }
 
     before_validation :number_readings
+    after_save :relink_words, if: :saved_change_to_character?
 
     scope :ordered, -> { order(:position, :character) }
     # Por semana del plan (las sin semana al final) y luego por orden dentro de la semana.
@@ -72,6 +75,14 @@ module KanjiStudy
     end
 
     private
+
+    # Un kanji nuevo (o con otro carácter) se enlaza con las palabras que ya lo contenían,
+    # y deja de estar enlazado a las que contienen el carácter anterior.
+    def relink_words
+      saved_change_to_character.compact.uniq.each do |character|
+        Word.containing(character).find_each(&:link_kanjis!)
+      end
+    end
 
     # Las lecturas quedan en el orden en que aparecen en el formulario.
     def number_readings

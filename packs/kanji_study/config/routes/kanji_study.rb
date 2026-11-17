@@ -11,6 +11,9 @@ scope module: :kanji_study do
     resource :practice_mode, only: :update, controller: "confusable_practice_modes"
   end
 
+  # Palabras de ejemplo (se enlazan solas con sus kanji)
+  resources :words, except: :show
+
   # Cuadrícula de kanji sabidos
   resources :known_kanjis, only: :index
 

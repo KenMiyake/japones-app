@@ -1,0 +1,10 @@
+<% content_for :title, "Editar #{@word.text_was}" %>
+<% content_for :breadcrumbs, breadcrumbs([ "Palabras", words_path ], [ @word.text_was ]) %>
+
+<%= render "shared/page_header", kanji: "編集", reading: "へんしゅう", title: "Editar #{@word.text_was}" %>
+<%= render "form", word: @word %>
+
+<div class="mt-12 max-w-2xl border-t border-sumi/10 pt-6">
+  <%= button_to "Eliminar palabra", word_path(@word), method: :delete,
+        class: ui_button_class(:danger, "-ml-4"), data: { turbo_confirm: "¿Eliminar la palabra #{@word.text_was}?" } %>
+</div>

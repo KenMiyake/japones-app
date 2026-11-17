@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.1].define(version: 2026_11_17_031212) do
+ActiveRecord::Schema[8.1].define(version: 2026_11_17_032345) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_catalog.plpgsql"
 
@@ -96,6 +96,28 @@ ActiveRecord::Schema[8.1].define(version: 2026_11_17_031212) do
     t.check_constraint "last_lesson >= first_lesson", name: "plan_weeks_lesson_range"
   end
 
+  create_table "word_kanjis", force: :cascade do |t|
+    t.bigint "word_id", null: false
+    t.bigint "kanji_id", null: false
+    t.integer "position", default: 0, null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["kanji_id"], name: "index_word_kanjis_on_kanji_id"
+    t.index ["word_id", "kanji_id"], name: "index_word_kanjis_on_word_id_and_kanji_id", unique: true
+    t.index ["word_id"], name: "index_word_kanjis_on_word_id"
+  end
+
+  create_table "words", force: :cascade do |t|
+    t.string "text", null: false
+    t.string "reading", null: false
+    t.string "meaning_es"
+    t.bigint "lesson_id"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["lesson_id"], name: "index_words_on_lesson_id"
+    t.index ["text", "reading"], name: "index_words_on_text_and_reading", unique: true
+  end
+
   add_foreign_key "confusable_groups", "plan_weeks", on_delete: :nullify
   add_foreign_key "confusable_members", "confusable_groups", on_delete: :cascade
   add_foreign_key "confusable_members", "kanjis", on_delete: :cascade
@@ -103,4 +125,7 @@ ActiveRecord::Schema[8.1].define(version: 2026_11_17_031212) do
   add_foreign_key "kanjis", "lessons", on_delete: :nullify
   add_foreign_key "kanjis", "plan_weeks", on_delete: :nullify
   add_foreign_key "known_kanjis", "kanjis", on_delete: :cascade
+  add_foreign_key "word_kanjis", "kanjis", on_delete: :cascade
+  add_foreign_key "word_kanjis", "words", on_delete: :cascade
+  add_foreign_key "words", "lessons", on_delete: :nullify
 end

@@ -1,0 +1,12 @@
+_fixture:
+  model_class: KanjiStudy::WordKanji
+
+shokuji_taberu:
+  word: shokuji
+  kanji: taberu
+  position: 0
+
+hito_hito:
+  word: hito
+  kanji: hito
+  position: 0
