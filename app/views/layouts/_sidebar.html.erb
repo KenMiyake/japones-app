@@ -9,8 +9,12 @@
               max-lg:-translate-x-full max-lg:group-data-open/sidebar:translate-x-0 max-lg:group-data-open/sidebar:shadow-xl
               lg:group-data-collapsed/sidebar:w-sidebar-collapsed print:hidden">
 
-  <div class="flex h-20 items-center px-[1.125rem]">
+  <div class="flex h-20 items-center justify-between px-[1.125rem]">
     <%= render "layouts/brand" %>
+
+    <%# Cerrar el cajón (móvil) %>
+    <button type="button" data-action="sidebar#close" aria-label="Cerrar menú"
+            class="grid size-8 place-items-center rounded-md text-sumi/50 transition-colors hover:bg-sumi/[0.05] hover:text-sumi lg:hidden">✕</button>
   </div>
 
   <nav class="flex-1 overflow-y-auto overflow-x-hidden px-3 py-4">
@@ -44,25 +48,19 @@
     </ul>
   </nav>
 
-  <div class="border-t border-sumi/10 p-3">
-    <%# Colapsar (escritorio) %>
-    <button type="button" data-action="sidebar#toggleCollapsed" data-sidebar-target="toggle"
-            aria-controls="sidebar" aria-expanded="<%= !sidebar_collapsed? %>" title="Colapsar o expandir"
-            class="hidden w-full items-center gap-3 rounded-md py-2 pl-1.5 pr-2 text-sm text-sumi/60 transition-colors hover:bg-sumi/[0.04] hover:text-sumi lg:flex">
-      <span class="grid size-9 shrink-0 place-items-center">
-        <svg class="size-4 transition-transform duration-300 motion-reduce:transition-none lg:group-data-collapsed/sidebar:rotate-180"
-             viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true">
-          <path d="M10 3.5 5.5 8l4.5 4.5" stroke-linecap="round" stroke-linejoin="round" />
-        </svg>
-      </span>
-      <span class="whitespace-nowrap transition-opacity duration-200 motion-reduce:transition-none lg:group-data-collapsed/sidebar:opacity-0">Colapsar</span>
-    </button>
-
-    <%# Cerrar (móvil) %>
-    <button type="button" data-action="sidebar#close"
-            class="flex w-full items-center gap-3 rounded-md py-2 pl-1.5 pr-2 text-sm text-sumi/60 transition-colors hover:bg-sumi/[0.04] hover:text-sumi lg:hidden">
-      <span class="grid size-9 shrink-0 place-items-center" aria-hidden="true">✕</span>
-      Cerrar
-    </button>
-  </div>
 </aside>
+
+<%# Colapsar / expandir (escritorio): botón redondo montado sobre el borde del sidebar, arriba.
+    Va fuera del <aside> (que recorta lo que sobresale) y se desliza junto con el borde. %>
+<button type="button" data-action="sidebar#toggleCollapsed" data-sidebar-target="toggle"
+        aria-controls="sidebar" aria-expanded="<%= !sidebar_collapsed? %>"
+        aria-label="Colapsar o expandir el menú" title="Colapsar o expandir el menú"
+        class="fixed top-7 z-50 hidden size-6 place-items-center rounded-full border border-sumi/15 bg-washi text-sumi/60 shadow-sm
+               transition-[left,color,border-color] duration-300 ease-out hover:border-shu/40 hover:text-shu motion-reduce:transition-none
+               left-[calc(var(--spacing-sidebar)-0.75rem)] lg:grid
+               lg:group-data-collapsed/sidebar:left-[calc(var(--spacing-sidebar-collapsed)-0.75rem)] print:hidden">
+  <svg class="size-3.5 transition-transform duration-300 motion-reduce:transition-none lg:group-data-collapsed/sidebar:rotate-180"
+       viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.75" aria-hidden="true">
+    <path d="M10 3.5 5.5 8l4.5 4.5" stroke-linecap="round" stroke-linejoin="round" />
+  </svg>
+</button>
