@@ -7,4 +7,22 @@
   /* Noto evita que Windows dibuje algunos kanji con formas chinas. */
   --font-sans: "Noto Sans JP", ui-sans-serif, system-ui, sans-serif;
   --font-kanji: "Noto Serif JP", ui-serif, serif;
+
+  /* Paleta japonesa minimalista */
+  --color-washi: #f7f4ed;   /* 和紙: papel, fondo */
+  --color-kinari: #efe9dc;  /* 生成り: crudo, sidebar */
+  --color-sumi: #24221f;    /* 墨: tinta, texto */
+  --color-nezumi: #77726a;  /* 鼠: gris, texto secundario */
+  --color-shu: #b8432f;     /* 朱: bermellón de los sellos, acento */
+  --color-kincha: #9a6b25;  /* 金茶: ocre, avisos */
+  --color-matcha: #5f7a4c;  /* 抹茶: verde, completado */
+
+  --spacing-sidebar: 15rem;
+  --spacing-sidebar-collapsed: 4.5rem;
+}
+
+@layer base {
+  ::selection {
+    background-color: color-mix(in oklab, var(--color-shu) 20%, transparent);
+  }
 }

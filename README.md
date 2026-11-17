@@ -189,3 +189,57 @@ Diferencias:
   con clases semánticas (`.badge-soft-warning`) y mixins (SCSS).
 - **CSS resultante:** Tailwind solo incluye las clases que aparecen en el código; el `@each`
   de SCSS genera todas las variantes, se usen o no.
+
+### Sidebar animado (colapsable y cajón en móvil)
+
+**Tailwind + Stimulus** (`app/views/layouts/_sidebar.html.erb`,
+`app/javascript/controllers/sidebar_controller.js`): el estado vive en atributos del
+`<body>` (`data-collapsed`, `data-open`) y cada elemento reacciona con variantes de grupo.
+El JS solo cambia atributos; la animación es CSS.
+
+```erb
+<body class="group/sidebar" data-controller="sidebar" <%= "data-collapsed" if sidebar_collapsed? %>>
+  <aside class="w-sidebar transition-[width,translate] duration-300
+                max-lg:-translate-x-full max-lg:group-data-open/sidebar:translate-x-0
+                lg:group-data-collapsed/sidebar:w-sidebar-collapsed">
+```
+
+```js
+toggleCollapsed() {
+  const collapsed = !this.element.hasAttribute("data-collapsed")
+  this.element.toggleAttribute("data-collapsed", collapsed)
+  document.cookie = `sidebar_collapsed=${collapsed ? 1 : 0}; path=/`
+}
+```
+
+**Bootstrap 5 + SCSS**: el cajón móvil ya existe (`offcanvas`, con su propio JS); el
+colapso en escritorio no, así que se escribe en SCSS con una clase en el `<body>`.
+
+```erb
+<aside class="offcanvas-lg offcanvas-start sidebar" id="sidebar">
+  <div class="offcanvas-body">…</div>
+</aside>
+<button class="btn d-lg-none" data-bs-toggle="offcanvas" data-bs-target="#sidebar">☰</button>
+```
+
+```scss
+.sidebar {
+  width: $sidebar-width;
+  transition: width .3s ease-out;
+  .label { transition: opacity .2s; }
+
+  body.sidebar-collapsed & {
+    width: $sidebar-collapsed-width;
+    .label { opacity: 0; }
+  }
+  @media (prefers-reduced-motion: reduce) { transition: none; }
+}
+```
+
+Diferencias:
+
+- **Móvil:** Bootstrap trae `offcanvas` listo (backdrop, Esc, foco); en Tailwind se arma
+  a mano con un controlador de Stimulus de pocas líneas.
+- **Estado:** en ambos casos conviene un atributo o clase en el `<body>` guardado en una
+  cookie, para que el servidor renderice el estado correcto y no haya parpadeo con Turbo.
+- **Movimiento reducido:** `motion-reduce:transition-none` ↔ `@media (prefers-reduced-motion)`.

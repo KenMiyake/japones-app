@@ -1,16 +1,16 @@
 module ApplicationHelper
   BADGE_TONES = {
-    neutral: "bg-stone-100 text-stone-700 ring-stone-300",
-    info: "bg-sky-50 text-sky-800 ring-sky-300",
-    warning: "bg-amber-50 text-amber-800 ring-amber-300",
-    success: "bg-emerald-50 text-emerald-800 ring-emerald-300"
+    neutral: "bg-sumi/[0.04] text-nezumi ring-sumi/15",
+    accent: "bg-shu/[0.07] text-shu ring-shu/30",
+    warning: "bg-kincha/[0.07] text-kincha ring-kincha/30",
+    success: "bg-matcha/[0.08] text-matcha ring-matcha/30"
   }.freeze
 
   # Insignia pequeña: <%= badge "provisional", tone: :warning %>
   # Las clases viven aquí para no repetirlas en cada vista (ver README, Aprendizajes).
   def badge(text, tone: :neutral)
     tag.span(text, class: [
-      "inline-flex items-center rounded-full px-2 py-0.5 text-xs font-medium ring-1 ring-inset",
+      "inline-flex items-center rounded-sm px-2 py-0.5 text-[11px] font-medium tracking-wide ring-1 ring-inset",
       BADGE_TONES.fetch(tone)
     ])
   end

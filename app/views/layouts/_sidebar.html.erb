@@ -1,0 +1,68 @@
+<%# Fondo oscuro detrás del cajón (solo móvil) %>
+<div data-action="click->sidebar#close" aria-hidden="true"
+     class="pointer-events-none fixed inset-0 z-30 bg-sumi/30 opacity-0 transition-opacity duration-300 motion-reduce:transition-none
+            group-data-open/sidebar:pointer-events-auto group-data-open/sidebar:opacity-100 lg:hidden print:hidden"></div>
+
+<aside id="sidebar" aria-label="Navegación principal"
+       class="fixed inset-y-0 left-0 z-40 flex w-sidebar flex-col overflow-x-hidden border-r border-sumi/10 bg-kinari
+              transition-[width,translate] duration-300 ease-out motion-reduce:transition-none
+              max-lg:-translate-x-full max-lg:group-data-open/sidebar:translate-x-0 max-lg:group-data-open/sidebar:shadow-xl
+              lg:group-data-collapsed/sidebar:w-sidebar-collapsed print:hidden">
+
+  <div class="flex h-20 items-center px-[1.125rem]">
+    <%= render "layouts/brand" %>
+  </div>
+
+  <nav class="flex-1 overflow-y-auto overflow-x-hidden px-3 py-4">
+    <ul class="space-y-1">
+      <% nav_items.each do |item| %>
+        <% active = nav_item_active?(item) %>
+        <li>
+          <%= content_tag(item.path ? :a : :span,
+                href: item.path,
+                title: item.label,
+                "aria-current": (active ? "page" : nil),
+                "aria-disabled": (item.path ? nil : "true"),
+                class: ["group/item relative flex items-center gap-3 rounded-md py-2 pl-1.5 pr-2 transition-colors duration-200",
+                        "before:absolute before:left-0 before:top-1/2 before:h-5 before:w-[3px] before:-translate-y-1/2 before:rounded-full before:bg-shu",
+                        "before:origin-center before:scale-y-0 before:transition-transform before:duration-300 motion-reduce:before:transition-none",
+                        active ? "bg-sumi/[0.06] text-sumi before:scale-y-100" : "",
+                        item.path && !active ? "text-sumi/75 hover:bg-sumi/[0.04] hover:text-sumi" : "",
+                        item.path ? "" : "cursor-default text-sumi/35"]) do %>
+            <span class="grid size-9 shrink-0 place-items-center font-kanji text-[15px] tracking-tight
+                         <%= active ? "text-shu" : "" %>"><%= item.kanji %></span>
+            <span class="flex flex-1 items-center justify-between gap-2 whitespace-nowrap text-sm transition-opacity duration-200 motion-reduce:transition-none
+                         lg:group-data-collapsed/sidebar:opacity-0">
+              <%= item.label %>
+              <% unless item.path %>
+                <span class="text-[10px] uppercase tracking-widest text-sumi/30">pronto</span>
+              <% end %>
+            </span>
+          <% end %>
+        </li>
+      <% end %>
+    </ul>
+  </nav>
+
+  <div class="border-t border-sumi/10 p-3">
+    <%# Colapsar (escritorio) %>
+    <button type="button" data-action="sidebar#toggleCollapsed" data-sidebar-target="toggle"
+            aria-controls="sidebar" aria-expanded="<%= !sidebar_collapsed? %>" title="Colapsar o expandir"
+            class="hidden w-full items-center gap-3 rounded-md py-2 pl-1.5 pr-2 text-sm text-sumi/60 transition-colors hover:bg-sumi/[0.04] hover:text-sumi lg:flex">
+      <span class="grid size-9 shrink-0 place-items-center">
+        <svg class="size-4 transition-transform duration-300 motion-reduce:transition-none lg:group-data-collapsed/sidebar:rotate-180"
+             viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true">
+          <path d="M10 3.5 5.5 8l4.5 4.5" stroke-linecap="round" stroke-linejoin="round" />
+        </svg>
+      </span>
+      <span class="whitespace-nowrap transition-opacity duration-200 motion-reduce:transition-none lg:group-data-collapsed/sidebar:opacity-0">Colapsar</span>
+    </button>
+
+    <%# Cerrar (móvil) %>
+    <button type="button" data-action="sidebar#close"
+            class="flex w-full items-center gap-3 rounded-md py-2 pl-1.5 pr-2 text-sm text-sumi/60 transition-colors hover:bg-sumi/[0.04] hover:text-sumi lg:hidden">
+      <span class="grid size-9 shrink-0 place-items-center" aria-hidden="true">✕</span>
+      Cerrar
+    </button>
+  </div>
+</aside>

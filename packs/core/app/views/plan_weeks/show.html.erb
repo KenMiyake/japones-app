@@ -1,30 +1,40 @@
 <% content_for :title, "#{@plan_week.code} · Plan de estudio" %>
+<% content_for :breadcrumbs, breadcrumbs([ "Plan de estudio", plan_weeks_path ], [ @plan_week.code ]) %>
 
-<nav class="mb-4 text-sm print:hidden">
-  <%= link_to "← Plan de estudio", plan_weeks_path, class: "text-stone-600 hover:text-stone-900" %>
+<%# En escritorio la ruta de la barra superior cumple esta función %>
+<nav class="mb-8 text-sm lg:hidden print:hidden">
+  <%= link_to plan_weeks_path, class: "inline-flex items-center gap-2 text-nezumi transition-colors hover:text-sumi" do %>
+    <span aria-hidden="true">←</span> Plan de estudio
+  <% end %>
 </nav>
 
-<header class="mb-6 flex flex-wrap items-baseline gap-x-4 gap-y-2">
-  <h1 class="text-3xl font-bold"><%= @plan_week.code %></h1>
-  <p class="text-lg"><%= @plan_week.lessons_label %></p>
-  <p class="text-stone-600"><%= date_range(@plan_week.starts_on, @plan_week.ends_on) %></p>
-  <%= badge "esta semana", tone: :info if @plan_week.current? %>
-  <%= badge "provisional", tone: :warning if @plan_week.provisional? %>
+<header class="mb-10">
+  <p class="flex items-baseline gap-3 text-nezumi">
+    <span class="font-kanji text-sm tracking-[0.3em] text-shu">週</span>
+    <span class="text-xs tracking-[0.2em]"><%= date_range(@plan_week.starts_on, @plan_week.ends_on) %></span>
+  </p>
+  <div class="mt-2 flex flex-wrap items-baseline gap-x-4 gap-y-2">
+    <h1 class="font-kanji text-4xl font-bold tracking-wide"><%= @plan_week.code %></h1>
+    <p class="text-lg tracking-wide text-nezumi"><%= @plan_week.lessons_label %></p>
+    <%= badge "esta semana", tone: :accent if @plan_week.current? %>
+    <%= badge "provisional", tone: :warning if @plan_week.provisional? %>
+  </div>
+  <div class="mt-6 h-px w-16 bg-sumi/20"></div>
 </header>
 
 <% if @plan_week.provisional? %>
-  <p class="mb-6 rounded-lg bg-amber-50 p-4 text-sm text-amber-900">
+  <p class="mb-10 border-l-2 border-kincha/60 py-1 pl-4 text-sm text-kincha">
     El contenido de esta semana es provisional: sus lecciones todavía no están escritas.
   </p>
 <% end %>
 
 <section>
-  <h2 class="mb-3 text-lg font-semibold">Lecciones</h2>
-  <ul class="divide-y divide-stone-200 rounded-lg border border-stone-200 bg-white">
+  <h2 class="mb-4 text-xs font-medium uppercase tracking-[0.2em] text-nezumi">Lecciones</h2>
+  <ul class="divide-y divide-sumi/10 border-y border-sumi/10">
     <% @lessons.each do |lesson| %>
-      <li id="<%= dom_id(lesson) %>" class="flex items-baseline gap-3 px-4 py-3">
-        <span class="font-medium"><%= lesson.code %></span>
-        <span class="<%= lesson.title.present? ? "" : "text-stone-400 italic" %>">
+      <li id="<%= dom_id(lesson) %>" class="flex items-baseline gap-6 py-4">
+        <span class="w-10 font-kanji font-bold tracking-wide"><%= lesson.code %></span>
+        <span class="<%= lesson.title.present? ? "" : "italic text-sumi/35" %>">
           <%= lesson.title.presence || "Sin título" %>
         </span>
       </li>

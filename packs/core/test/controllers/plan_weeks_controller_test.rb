@@ -7,8 +7,8 @@ class PlanWeeksControllerTest < ActionDispatch::IntegrationTest
     assert_response :success
     assert_select "html[lang=es]"
     assert_select "h1", "Plan de estudio"
-    assert_select "ol li", 3
-    assert_select "ol li:first-child", /S1/
+    assert_select "main ol li", 3
+    assert_select "main ol li:first-child", /S1/
     assert_select "##{dom_id(plan_weeks(:s4))}", /provisional/
   end
 

@@ -1,0 +1,10 @@
+<%# Sello (hanko) + nombre. El nombre se oculta cuando el sidebar está colapsado. %>
+<%= link_to root_path, class: "flex items-center gap-3 overflow-hidden" do %>
+  <span class="grid size-9 shrink-0 place-items-center rounded-[3px] bg-shu font-kanji text-lg text-washi shadow-[inset_0_0_0_2px_rgb(255_255_255/0.18)]"
+        aria-hidden="true">漢</span>
+  <span class="flex flex-col whitespace-nowrap leading-tight transition-opacity duration-200 motion-reduce:transition-none
+               lg:group-data-collapsed/sidebar:opacity-0">
+    <span class="font-kanji text-base font-bold tracking-wide">Japonés</span>
+    <span class="text-[11px] tracking-[0.2em] text-nezumi">漢字帳</span>
+  </span>
+<% end %>

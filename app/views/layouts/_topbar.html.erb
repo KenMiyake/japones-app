@@ -1,0 +1,66 @@
+<header class="sticky top-0 z-20 flex h-16 items-center gap-3 border-b border-sumi/10 bg-washi/85 px-4 backdrop-blur lg:px-12 print:hidden">
+  <%# Izquierda (móvil): menú + logo %>
+  <button type="button" data-action="sidebar#open" aria-label="Abrir menú"
+          class="rounded-md p-2 text-sumi/70 transition hover:bg-sumi/5 hover:text-sumi lg:hidden">
+    <svg class="size-5" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true">
+      <path d="M3 6h14M3 10h14M3 14h14" stroke-linecap="round" />
+    </svg>
+  </button>
+  <div class="lg:hidden"><%= render "layouts/brand" %></div>
+
+  <%# Izquierda (escritorio): ruta de navegación %>
+  <% if content_for?(:breadcrumbs) %>
+    <nav aria-label="Ruta" class="hidden min-w-0 lg:block">
+      <ol class="flex items-center gap-2 text-sm text-nezumi"><%= yield :breadcrumbs %></ol>
+    </nav>
+  <% end %>
+
+  <div class="ml-auto flex items-center gap-2">
+    <%# Atajo a la semana actual %>
+    <% if (current_week = PlanWeek.current) %>
+      <%= link_to plan_week_path(current_week), title: "Semana actual",
+            class: "hidden items-center gap-2 rounded-md px-3 py-1.5 text-sm text-sumi/75 transition-colors hover:bg-sumi/[0.05] hover:text-sumi sm:flex" do %>
+        <span class="font-kanji text-xs tracking-[0.2em] text-shu">今週</span>
+        <span class="font-medium"><%= current_week.code %></span>
+      <% end %>
+      <span class="hidden h-5 w-px bg-sumi/10 sm:block" aria-hidden="true"></span>
+    <% end %>
+
+    <%# Menú de usuario (las opciones llegan con la autenticación) %>
+    <div class="group/menu relative" data-controller="dropdown"
+         data-action="click@window->dropdown#closeOnOutsideClick keydown.esc@window->dropdown#closeOnEscape">
+      <button type="button" data-dropdown-target="button" data-action="dropdown#toggle"
+              aria-haspopup="menu" aria-expanded="false" aria-controls="user-menu" aria-label="Menú de usuario"
+              class="flex items-center gap-2 rounded-full p-1 pr-2 transition-colors hover:bg-sumi/[0.05]">
+        <span class="grid size-8 place-items-center rounded-full border border-sumi/15 bg-white/70 font-kanji text-sm">私</span>
+        <svg class="size-3.5 text-nezumi transition-transform duration-200 group-data-open/menu:rotate-180 motion-reduce:transition-none"
+             viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true">
+          <path d="M4 6l4 4 4-4" stroke-linecap="round" stroke-linejoin="round" />
+        </svg>
+      </button>
+
+      <div id="user-menu" role="menu" data-dropdown-target="menu"
+           class="invisible absolute right-0 mt-2 w-60 origin-top-right scale-95 rounded-md border border-sumi/10 bg-white p-1.5 opacity-0
+                  shadow-[0_12px_32px_-12px_rgb(36_34_31/0.3)] transition duration-150 ease-out motion-reduce:transition-none
+                  group-data-open/menu:visible group-data-open/menu:scale-100 group-data-open/menu:opacity-100">
+        <div class="px-3 py-2.5">
+          <p class="text-sm font-medium">Usuario local</p>
+          <p class="text-xs text-nezumi">Sin cuenta: la app es de uso personal</p>
+        </div>
+        <div class="my-1 h-px bg-sumi/10"></div>
+        <% user_menu_items.each do |item| %>
+          <% if item == :divider %>
+            <div class="my-1 h-px bg-sumi/10"></div>
+          <% else %>
+            <span role="menuitem" aria-disabled="true"
+                  class="flex cursor-default items-center gap-3 rounded px-3 py-2 text-sm text-sumi/40">
+              <span class="w-5 text-center font-kanji text-xs"><%= item.kanji %></span>
+              <span class="flex-1"><%= item.label %></span>
+              <span class="text-[10px] uppercase tracking-widest text-sumi/30">pronto</span>
+            </span>
+          <% end %>
+        <% end %>
+      </div>
+    </div>
+  </div>
+</header>

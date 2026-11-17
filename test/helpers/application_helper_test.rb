@@ -17,6 +17,6 @@ class ApplicationHelperTest < ActionView::TestCase
     html = badge("provisional", tone: :warning)
 
     assert_includes html, "provisional"
-    assert_includes html, "bg-amber-50"
+    assert_includes html, "text-kincha"
   end
 end

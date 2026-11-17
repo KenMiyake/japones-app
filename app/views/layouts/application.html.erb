@@ -20,19 +20,19 @@
     <%= javascript_importmap_tags %>
   </head>
 
-  <body class="min-h-screen bg-stone-50 text-stone-900 antialiased">
-    <header class="border-b border-stone-200 bg-white print:hidden">
-      <nav class="mx-auto flex max-w-6xl items-center gap-6 px-5 py-3">
-        <%= link_to root_path, class: "flex items-baseline gap-2" do %>
-          <span class="font-kanji text-2xl">漢字</span>
-          <span class="font-medium">Japonés</span>
-        <% end %>
-        <%= link_to "Plan", plan_weeks_path, class: "text-sm text-stone-600 hover:text-stone-900" %>
-      </nav>
-    </header>
+  <%# Estado del sidebar en el body: data-collapsed (escritorio) y data-open (móvil). %>
+  <%= tag.body class: "group/sidebar min-h-screen bg-washi font-sans text-sumi antialiased",
+               data: { controller: "sidebar", action: "keydown.esc@window->sidebar#close",
+                       collapsed: (sidebar_collapsed? ? "" : nil) } do %>
+    <%= render "layouts/sidebar" %>
 
-    <main class="mx-auto max-w-6xl px-5 py-8">
-      <%= yield %>
-    </main>
-  </body>
+    <div class="min-h-screen transition-[padding] duration-300 ease-out motion-reduce:transition-none
+                lg:pl-sidebar lg:group-data-collapsed/sidebar:pl-sidebar-collapsed print:pl-0">
+      <%= render "layouts/topbar" %>
+
+      <main class="mx-auto max-w-6xl px-6 py-10 lg:px-12 lg:py-12">
+        <%= yield %>
+      </main>
+    </div>
+  <% end %>
 </html>
