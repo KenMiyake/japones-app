@@ -29,6 +29,38 @@
     linear-gradient(to bottom, transparent calc(50% - 0.5px), var(--guide) calc(50% - 0.5px), var(--guide) calc(50% + 0.5px), transparent calc(50% + 0.5px));
 }
 
+/* Inicio: おかえり se dibuja trazo a trazo y luego se rellena de tinta. */
+@layer components {
+  .okaeri-char {
+    fill: transparent;
+    stroke: currentColor;
+    stroke-width: 1.2;
+    stroke-linejoin: round;
+    stroke-dasharray: 1000;
+    stroke-dashoffset: 1000;
+    animation:
+      okaeri-draw 1.6s cubic-bezier(0.6, 0.1, 0.3, 1) forwards,
+      okaeri-ink 0.9s ease-out forwards;
+    animation-delay: calc(var(--i) * 0.35s), calc(var(--i) * 0.35s + 1.2s);
+  }
+
+  .okaeri-fade {
+    opacity: 0;
+    transform: translateY(6px);
+    animation: okaeri-fade 0.9s ease-out forwards;
+    animation-delay: var(--delay, 0s);
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .okaeri-char { animation: none; fill: currentColor; stroke: none; }
+    .okaeri-fade { animation: none; opacity: 1; transform: none; }
+  }
+}
+
+@keyframes okaeri-draw { to { stroke-dashoffset: 0; } }
+@keyframes okaeri-ink { to { fill: currentColor; stroke-width: 0; } }
+@keyframes okaeri-fade { to { opacity: 1; transform: none; } }
+
 @layer base {
   ::selection {
     background-color: color-mix(in oklab, var(--color-shu) 20%, transparent);

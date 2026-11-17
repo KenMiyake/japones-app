@@ -1,0 +1,33 @@
+<% content_for :title, "おかえり · Japonés" %>
+
+<section class="flex min-h-[calc(100vh-12rem)] flex-col items-center justify-center text-center">
+  <%# おかえり que se dibuja: cada carácter traza su contorno y luego se rellena de tinta. %>
+  <h1 class="sr-only">おかえり — Bienvenido</h1>
+  <svg class="okaeri h-28 w-auto overflow-visible text-sumi sm:h-36" viewBox="0 0 400 110" aria-hidden="true">
+    <% "おかえり".each_char.with_index do |char, index| %>
+      <text x="<%= 50 + index * 100 %>" y="88" text-anchor="middle" style="--i: <%= index %>"
+            class="okaeri-char font-kanji" font-size="96" font-weight="500"><%= char %></text>
+    <% end %>
+  </svg>
+
+  <p class="okaeri-fade mt-6 font-kanji text-2xl tracking-[0.3em] text-nezumi" style="--delay: 2.6s">Bienvenido</p>
+
+  <div class="okaeri-fade mt-12 flex flex-col items-center gap-4" style="--delay: 3.2s">
+    <div class="h-px w-12 bg-shu/60"></div>
+    <% if @current_week %>
+      <p class="text-sm text-nezumi">
+        Semana <span class="font-medium text-sumi"><%= @current_week.code %></span>
+        · día <%= (Date.current - @current_week.starts_on).to_i + 1 %> de 7
+        · <%= @current_week.lessons_label %>
+      </p>
+      <%= link_to "Continuar con #{@current_week.code}", plan_week_path(@current_week), class: ui_button_class(:primary) %>
+    <% elsif @next_week %>
+      <p class="text-sm text-nezumi">
+        El plan empieza el <%= l(@next_week.starts_on, format: :long) %>.
+      </p>
+      <%= link_to "Ver el plan", plan_weeks_path, class: ui_button_class(:secondary) %>
+    <% else %>
+      <%= link_to "Ver el plan", plan_weeks_path, class: ui_button_class(:secondary) %>
+    <% end %>
+  </div>
+</section>

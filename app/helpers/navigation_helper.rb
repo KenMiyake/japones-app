@@ -45,7 +45,6 @@ module NavigationHelper
   def nav_item_active?(item)
     return false if item.path.nil?
 
-    current_page?(item.path) || request.path.start_with?("#{item.path}/") ||
-      (item.path == plan_weeks_path && current_page?(root_path))
+    current_page?(item.path) || request.path.start_with?("#{item.path}/")
   end
 end

@@ -1,8 +1,8 @@
 require "test_helper"
 
 class PlanWeeksControllerTest < ActionDispatch::IntegrationTest
-  test "la raíz muestra el plan con todas las semanas en orden" do
-    get root_path
+  test "el plan muestra todas las semanas en orden" do
+    get plan_weeks_path
 
     assert_response :success
     assert_select "html[lang=es]"
@@ -24,7 +24,7 @@ class PlanWeeksControllerTest < ActionDispatch::IntegrationTest
   test "sin semanas, indica cómo cargarlas" do
     PlanWeek.delete_all
 
-    get root_path
+    get plan_weeks_path
 
     assert_select "code", "bin/rails db:seed"
   end

@@ -2,7 +2,7 @@ require "test_helper"
 
 class SidebarTest < ActionDispatch::IntegrationTest
   test "el sidebar marca la sección actual" do
-    get root_path
+    get plan_weeks_path
 
     assert_select "aside#sidebar nav a[aria-current=page]", /Plan/
   end
