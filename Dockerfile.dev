@@ -1,0 +1,22 @@
+# syntax=docker/dockerfile:1
+# Imagen para DESARROLLO (docker compose). La de producción es ./Dockerfile.
+
+ARG RUBY_VERSION=4.0.9
+FROM docker.io/library/ruby:$RUBY_VERSION-slim
+
+WORKDIR /rails
+
+RUN apt-get update -qq && \
+    apt-get install --no-install-recommends -y \
+      build-essential git libpq-dev libyaml-dev pkg-config curl postgresql-client && \
+    rm -rf /var/lib/apt/lists /var/cache/apt/archives
+
+ENV BUNDLE_PATH="/usr/local/bundle" \
+    RAILS_ENV="development"
+
+# Las gemas se instalan en un volumen (ver docker-compose.yml); aquí solo se precalientan.
+COPY Gemfile Gemfile.lock .ruby-version ./
+RUN bundle install && gem install foreman --no-document
+
+EXPOSE 3000
+CMD ["bin/dev"]

@@ -1,0 +1,5 @@
+# kanji_study: kanji, lecturas, palabras, piezas, grupos para distinguir y kanji sabidos.
+# Namespace: KanjiStudy (para evitar Kanji::Kanji).
+enforce_dependencies: false
+dependencies:
+  - packs/core

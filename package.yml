@@ -1,0 +1,3 @@
+# Pack raíz: lo que vive en app/ (layout, estilos, lo transversal).
+# Ver docs/decisions/0001-packs-por-dominio.md
+enforce_dependencies: false

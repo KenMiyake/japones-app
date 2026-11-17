@@ -1,0 +1,10 @@
+@import "tailwindcss";
+
+/* Las vistas de los packs viven fuera de app/ (ver docs/decisions/0001). */
+@source "../../../packs";
+
+@theme {
+  /* Noto evita que Windows dibuje algunos kanji con formas chinas. */
+  --font-sans: "Noto Sans JP", ui-sans-serif, system-ui, sans-serif;
+  --font-kanji: "Noto Serif JP", ui-serif, serif;
+}

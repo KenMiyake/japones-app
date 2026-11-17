@@ -1,0 +1,36 @@
+#!/usr/bin/env sh
+# Recompila Tailwind cuando cambian las vistas, helpers, JS o CSS.
+#
+# Con TAILWIND_POLL=1 (lo define docker-compose.yml) revisa los archivos cada segundo.
+# Docker Desktop en Windows no propaga los eventos de cambio de archivos a las carpetas
+# montadas, así que el watcher nativo de Tailwind (`tailwindcss:watch`) no se entera.
+# Sin TAILWIND_POLL usa el watcher nativo.
+
+if [ -z "$TAILWIND_POLL" ]; then
+  exec bin/rails "tailwindcss:watch[always]"
+fi
+
+WATCHED="app/views app/helpers app/javascript app/assets/tailwind packs"
+MARKER="${TMPDIR:-/tmp}/tailwind-watch.marker"
+
+build() {
+  bundle exec tailwindcss \
+    -i app/assets/tailwind/application.css \
+    -o app/assets/builds/tailwind.css 2>&1 | grep -v '^$'
+}
+
+file_count() { find $WATCHED -type f 2>/dev/null | wc -l; }
+
+touch "$MARKER"
+count=$(file_count)
+build
+
+while sleep 1; do
+  new_count=$(file_count)
+  # Archivo nuevo o modificado (más reciente que el marcador) o archivo borrado (cambia la cuenta).
+  if [ "$new_count" != "$count" ] || [ -n "$(find $WATCHED -type f -newer "$MARKER" -print -quit 2>/dev/null)" ]; then
+    touch "$MARKER"
+    count=$new_count
+    build
+  fi
+done

@@ -1,0 +1,4 @@
+# core: lo compartido por todos los dominios.
+# Lesson (lecciones de Minna no Nihongo), PlanWeek (semanas del plan) y, en la v2, el repaso.
+enforce_dependencies: false
+dependencies: []

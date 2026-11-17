@@ -1,0 +1,45 @@
+# Entorno de desarrollo: app Rails + PostgreSQL.
+#   docker compose up            levanta todo en http://localhost:3000
+#   docker compose run --rm web bin/rails test
+
+services:
+  db:
+    image: postgres:18
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+    volumes:
+      # Volumen con nombre: los datos de Postgres quedan fuera de la carpeta del
+      # proyecto (que está sincronizada con OneDrive).
+      - pg_data:/var/lib/postgresql
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U postgres"]
+      interval: 2s
+      timeout: 5s
+      retries: 15
+
+  web:
+    build:
+      context: .
+      dockerfile: Dockerfile.dev
+    command: bin/dev
+    ports:
+      - "3000:3000"
+    environment:
+      DB_HOST: db
+      DB_USERNAME: postgres
+      DB_PASSWORD: postgres
+      # Ver bin/tailwind-watch: en Windows los cambios de archivos no llegan al contenedor.
+      TAILWIND_POLL: "1"
+    volumes:
+      - .:/rails
+      - bundle:/usr/local/bundle
+    depends_on:
+      db:
+        condition: service_healthy
+    tty: true
+    stdin_open: true
+
+volumes:
+  pg_data:
+  bundle:
