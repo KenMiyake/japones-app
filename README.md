@@ -201,7 +201,7 @@ Carga desde `db/seeds/`:
 
 | Archivo | Qué crea |
 |---|---|
-| `plan.csv` | Lecciones L01–L25 de Minna I y semanas S1–S8 (desde el lunes 16/11/2026, consecutivas) |
+| `plan.csv` | Lecciones L01–L25 de Minna I y semanas S1–S8 (desde el lunes 23/11/2026, consecutivas) |
 | `plan.csv` (columna `kanji`) | Los 196 kanji del plan, cada uno en su semana y en el orden del CSV, sin significado ni lecturas |
 | `confusable_groups.csv` | Los 22 grupos para distinguir (tarjeta / papel / por confirmar) y los 8 kanji de referencia que no están en el plan (人 日 目 干 会 小 大 水) |
 

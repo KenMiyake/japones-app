@@ -6,7 +6,7 @@ require "csv"
 # así que se puede volver a correr sin perder lo que se editó desde la app.
 class PlanSeeder
   DEFAULT_CSV = Rails.root.join("db/seeds/plan.csv")
-  DEFAULT_STARTS_ON = Date.new(2026, 11, 16) # lunes de la S1
+  DEFAULT_STARTS_ON = Date.new(2026, 11, 23) # lunes de la S1 (semana ISO 48)
   LESSON_NUMBERS = 1..25 # Minna no Nihongo I
 
   Result = Data.define(:lessons_created, :weeks_created)

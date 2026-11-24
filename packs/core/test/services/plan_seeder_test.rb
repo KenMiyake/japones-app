@@ -15,12 +15,12 @@ class PlanSeederTest < ActiveSupport::TestCase
     assert_equal %w[S1 S2 S3 S4 S5 S6 S7 S8], PlanWeek.ordered.pluck(:code)
   end
 
-  test "las semanas son consecutivas desde el lunes 16/11/2026" do
+  test "las semanas son consecutivas desde el lunes 23/11/2026" do
     PlanSeeder.call
 
-    assert_equal Date.new(2026, 11, 16), PlanWeek.find_by!(code: "S1").starts_on
-    assert_equal Date.new(2026, 11, 30), PlanWeek.find_by!(code: "S3").starts_on
-    assert_equal Date.new(2027, 1, 4), PlanWeek.find_by!(code: "S8").starts_on
+    assert_equal Date.new(2026, 11, 23), PlanWeek.find_by!(code: "S1").starts_on
+    assert_equal Date.new(2026, 12, 7), PlanWeek.find_by!(code: "S3").starts_on
+    assert_equal Date.new(2027, 1, 11), PlanWeek.find_by!(code: "S8").starts_on
   end
 
   test "lee el rango de lecciones y si la semana es provisional" do

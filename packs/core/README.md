@@ -49,7 +49,7 @@ Las claves foráneas de otros packs hacia `plan_weeks` y `lessons` usan
 ## Datos iniciales
 
 [`PlanSeeder`](app/services/plan_seeder.rb) lee `db/seeds/plan.csv` y crea L01–L25 y
-S1–S8, desde el lunes 16/11/2026 y en semanas consecutivas. Crea solo lo que falta (no
+S1–S8, desde el lunes 23/11/2026 (semana ISO 48) y en semanas consecutivas. Crea solo lo que falta (no
 sobrescribe) y si el CSV trae un error no deja nada a medias.
 
 ## Tests
