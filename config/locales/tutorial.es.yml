@@ -1,0 +1,84 @@
+# Textos del tutorial (recorrido guiado). Para otro idioma, copia este archivo como
+# tutorial.<idioma>.yml (p. ej. tutorial.en.yml) y traduce los textos; las claves y los
+# `target` no se traducen. Ver docs/tutorial-e-i18n.md.
+#
+# Cada paso:
+#   key:    identificador del paso
+#   target: elemento que se resalta (atributo data-tour="…" en la interfaz).
+#           Sin target, la tarjeta aparece centrada.
+#   title / body: lo que se muestra.
+es:
+  tutorial:
+    open: Ver tutorial
+    controls:
+      next: Siguiente
+      previous: Anterior
+      skip: Saltar
+      finish: Empezar
+      progress: "%{current} de %{total}"
+    steps:
+      - key: welcome
+        title: おかえり — Te damos la bienvenida
+        body: >-
+          Esta app reúne todo lo que necesitas para estudiar los kanji de Minna no Nihongo:
+          el plan de 8 semanas, el contenido de cada kanji y, muy pronto, el repaso diario.
+          Te muestro dónde está cada cosa.
+      - key: plan
+        target: plan
+        title: 計画 Plan
+        body: >-
+          Las 8 semanas del plan. Cada semana muestra sus kanji, sus grupos para distinguir y
+          las lecciones de Minna que cubre.
+      - key: pending
+        target: pending
+        title: 未完 Pendientes
+        body: >-
+          Lo que falta completar de cada kanji (significado, lecturas, mnemotecnia, lección).
+          Puedes completarlo aquí mismo, fila por fila, sin abrir cada ficha.
+      - key: kanji
+        target: kanji
+        title: 漢字 Kanji
+        body: >-
+          Todos los kanji, por semana. En la ficha de cada uno están sus lecturas, piezas,
+          palabras, con qué se confunde y el estado de su repaso.
+      - key: words
+        target: words
+        title: 言葉 Palabras
+        body: >-
+          Palabras de ejemplo. Se enlazan solas con los kanji que contienen: 電車 aparece en la
+          ficha de 電 y en la de 車.
+      - key: components
+        target: components
+        title: 部品 Piezas
+        body: >-
+          Las partes de los kanji, con los nombres que usas en tus mnemotecnias. También se
+          crean desde el formulario de cada kanji.
+      - key: distinguish
+        target: distinguish
+        title: 区別 Distinguir
+        body: >-
+          Kanji que se confunden, como 人 y 入 o 場 y 地. Decide si cada grupo se practica con
+          tarjeta, en papel o si está por confirmar.
+      - key: known
+        target: known
+        title: 既知 Sabidos
+        body: >-
+          Marca los kanji que ya sabes. Pasan directo al repaso a largo plazo, repartidos en
+          los próximos días.
+      - key: current_week
+        target: current_week
+        title: 今週 Esta semana
+        body: Un atajo a la semana del plan en la que estás hoy.
+      - key: collapse
+        target: collapse
+        title: Más espacio
+        body: Colapsa el menú lateral para dejar solo los íconos. La app recuerda tu elección.
+      - key: user_menu
+        target: user_menu
+        title: Tu menú
+        body: Desde aquí puedes volver a ver este tutorial cuando quieras.
+      - key: done
+        title: ¡Listo!
+        body: >-
+          Un buen primer paso: revisa Pendientes de esta semana o marca en Sabidos los kanji
+          que ya conoces. がんばって！
