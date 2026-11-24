@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.1].define(version: 2026_11_17_032931) do
+ActiveRecord::Schema[8.1].define(version: 2026_11_24_024622) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_catalog.plpgsql"
 
@@ -118,6 +118,48 @@ ActiveRecord::Schema[8.1].define(version: 2026_11_17_032931) do
     t.check_constraint "last_lesson >= first_lesson", name: "plan_weeks_lesson_range"
   end
 
+  create_table "srs_cards", force: :cascade do |t|
+    t.string "reviewable_type", null: false
+    t.bigint "reviewable_id", null: false
+    t.string "card_type", null: false
+    t.string "state", default: "new", null: false
+    t.datetime "due_at", null: false
+    t.float "stability", default: 0.0, null: false
+    t.float "difficulty", default: 0.0, null: false
+    t.integer "elapsed_days", default: 0, null: false
+    t.integer "scheduled_days", default: 0, null: false
+    t.integer "learning_steps", default: 0, null: false
+    t.integer "reps", default: 0, null: false
+    t.integer "lapses", default: 0, null: false
+    t.datetime "last_reviewed_at"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["due_at"], name: "index_srs_cards_on_due_at"
+    t.index ["reviewable_type", "reviewable_id", "card_type"], name: "index_srs_cards_on_reviewable_and_type", unique: true
+    t.index ["reviewable_type", "reviewable_id"], name: "index_srs_cards_on_reviewable"
+    t.check_constraint "state::text = ANY (ARRAY['new'::character varying, 'learning'::character varying, 'review'::character varying, 'relearning'::character varying]::text[])", name: "srs_cards_state"
+  end
+
+  create_table "srs_reviews", force: :cascade do |t|
+    t.bigint "card_id", null: false
+    t.string "rating", null: false
+    t.datetime "reviewed_at", null: false
+    t.string "state", null: false
+    t.datetime "due_at", null: false
+    t.float "stability", null: false
+    t.float "difficulty", null: false
+    t.integer "elapsed_days", null: false
+    t.integer "last_elapsed_days", null: false
+    t.integer "scheduled_days", null: false
+    t.integer "learning_steps", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["card_id", "reviewed_at"], name: "index_srs_reviews_on_card_id_and_reviewed_at"
+    t.index ["card_id"], name: "index_srs_reviews_on_card_id"
+    t.index ["reviewed_at"], name: "index_srs_reviews_on_reviewed_at"
+    t.check_constraint "rating::text = ANY (ARRAY['again'::character varying, 'hard'::character varying, 'good'::character varying, 'easy'::character varying]::text[])", name: "srs_reviews_rating"
+  end
+
   create_table "word_kanjis", force: :cascade do |t|
     t.bigint "word_id", null: false
     t.bigint "kanji_id", null: false
@@ -149,6 +191,7 @@ ActiveRecord::Schema[8.1].define(version: 2026_11_17_032931) do
   add_foreign_key "kanjis", "lessons", on_delete: :nullify
   add_foreign_key "kanjis", "plan_weeks", on_delete: :nullify
   add_foreign_key "known_kanjis", "kanjis", on_delete: :cascade
+  add_foreign_key "srs_reviews", "srs_cards", column: "card_id", on_delete: :cascade
   add_foreign_key "word_kanjis", "kanjis", on_delete: :cascade
   add_foreign_key "word_kanjis", "words", on_delete: :cascade
   add_foreign_key "words", "lessons", on_delete: :nullify
