@@ -59,6 +59,32 @@ Al eliminar una pieza, una palabra o un grupo, los kanji no se tocan.
 
 Los controladores de Stimulus viven en `app/javascript/controllers/` (se comparten entre packs).
 
+## Tarjetas de repaso
+
+`kanji_study` depende del pack [`srs`](../srs/README.md) y le da sus tarjetas.
+[`KanjiStudy::CardSync`](app/services/kanji_study/card_sync.rb) las crea y las mantiene:
+
+| Qué | Tarjetas | Orden de entrada (`new_rank`) |
+|---|---|---|
+| Kanji del plan | **Leer** (`read`) y **Escribir** (`write`) | Semana, posición del kanji, Leer antes que Escribir (S1 · 1 → `10010`, `10011`) |
+| Kanji de referencia (sin semana) | Ninguna | — |
+| Grupo para distinguir en modo *tarjeta* | **Distinguir** (`distinguish`) | Después de los kanji de su semana |
+
+Cuándo se sincronizan (callbacks):
+
+- **Kanji:** al crearse en una semana o al cambiar de semana o de posición. Si sale del plan,
+  se borran sus tarjetas nunca repasadas (las que tienen historial se conservan).
+- **Sabidos:** al marcar un kanji, sus tarjetas nuevas pasan a *en repaso* con
+  `Srs::Scheduler#mark_known!`, repartidas en los próximos 7 días (sin registrar repasos).
+  Al desmarcarlo, si nunca se repasaron de verdad, vuelven a ser nuevas.
+- **Grupos:** al cambiar el modo de práctica o la semana. Fuera de *tarjeta*, se borra su
+  tarjeta Distinguir si nunca se repasó.
+- **Todo:** `CardSync.sync_all`, que corre al final de `bin/rails db:seed` (idempotente).
+
+En la ficha del kanji, la sección **Repaso** muestra cada tarjeta (estado y próximo repaso)
+y el botón **Olvidado** (`POST /kanjis/:kanji_id/cards/:card_type/forgot`), que equivale a
+responder *Otra vez*: la tarjeta vuelve hoy, en reaprendizaje.
+
 ## Lo que aporta a otros packs
 
 Registra dos secciones en la página de cada semana (`config/initializers/plan_week_sections.rb`):
@@ -74,7 +100,8 @@ Registra dos secciones en la página de cada semana (`config/initializers/plan_w
 | `ConfusableGroupSeeder` | `db/seeds/confusable_groups.csv` | Los 22 grupos y los 8 kanji de referencia (人 日 目 干 会 小 大 水) |
 
 Los dos son idempotentes y no sobrescriben lo editado. Corren con `bin/rails db:seed`,
-después de `PlanSeeder` (core).
+después de `PlanSeeder` (core). Al final, `CardSync.sync_all` crea las tarjetas de repaso
+(196 kanji × 2 + los grupos en modo tarjeta).
 
 ## Tests
 
