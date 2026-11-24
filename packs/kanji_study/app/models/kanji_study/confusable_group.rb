@@ -12,6 +12,8 @@ module KanjiStudy
              class_name: "KanjiStudy::ConfusableMember", inverse_of: :confusable_group,
              dependent: :destroy, autosave: true # autosave: guarda también el nuevo orden de los existentes
     has_many :kanjis, through: :members
+    # Tarjeta Distinguir (pack srs), solo en modo "tarjeta". Ver KanjiStudy::CardSync.
+    has_many :srs_cards, as: :reviewable, class_name: "Srs::Card", dependent: :destroy
 
     # card: tiene tarjeta · paper: se practica en papel · pending: por confirmar
     enum :practice_mode, { card: "card", paper: "paper", pending: "pending" },
@@ -22,6 +24,7 @@ module KanjiStudy
     validate :has_at_least_two_kanji
     before_save :sync_members, if: -> { @parsed_characters }
     after_save :forget_typed_characters
+    after_save :sync_cards, if: -> { previously_new_record? || saved_change_to_practice_mode? || saved_change_to_plan_week_id? }
 
     scope :in_plan_order, -> {
       left_joins(:plan_week).order(PlanWeek.arel_table[:position].asc.nulls_last, :id)
@@ -65,6 +68,10 @@ module KanjiStudy
         member.position = position
         member
       end
+    end
+
+    def sync_cards
+      CardSync.sync_group(self)
     end
 
     # Tras guardar, los miembros mandan: se descarta el texto escrito y se recarga `kanjis`.

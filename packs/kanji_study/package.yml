@@ -3,3 +3,4 @@
 enforce_dependencies: false
 dependencies:
   - packs/core
+  - packs/srs   # tarjetas de repaso de kanji y grupos (KanjiStudy::CardSync)

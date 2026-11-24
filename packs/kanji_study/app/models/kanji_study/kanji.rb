@@ -16,6 +16,8 @@ module KanjiStudy
     has_many :kanji_components, -> { order(:position) }, class_name: "KanjiStudy::KanjiComponent",
              inverse_of: :kanji, dependent: :destroy, autosave: true
     has_many :components, through: :kanji_components
+    # Tarjetas de repaso (pack srs): Leer y Escribir. Ver KanjiStudy::CardSync.
+    has_many :srs_cards, as: :reviewable, class_name: "Srs::Card", dependent: :destroy
 
     accepts_nested_attributes_for :readings, allow_destroy: true,
                                              reject_if: ->(attrs) { attrs["kana"].blank? && attrs["okurigana"].blank? }
@@ -31,6 +33,7 @@ module KanjiStudy
     before_validation :number_readings, unless: -> { @readings_text }
     after_save :relink_words, if: :saved_change_to_character?
     after_save { @readings_text = nil }
+    after_save :sync_cards, if: -> { previously_new_record? || saved_change_to_plan_week_id? || saved_change_to_position? }
     before_save :sync_components, if: -> { @component_tokens }
     after_save :forget_component_tokens
 
@@ -136,6 +139,11 @@ module KanjiStudy
       saved_change_to_character.compact.uniq.each do |character|
         Word.containing(character).find_each(&:link_kanjis!)
       end
+    end
+
+    # Crea o reordena las tarjetas de repaso cuando el kanji entra al plan o cambia de lugar.
+    def sync_cards
+      CardSync.sync_kanji(self)
     end
 
     def sync_components

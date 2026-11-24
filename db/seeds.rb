@@ -11,3 +11,7 @@ puts "Kanji creados: #{kanji.created} (ya existían: #{kanji.skipped})"
 groups = KanjiStudy::ConfusableGroupSeeder.call
 puts "Grupos para distinguir creados: #{groups.created} (ya existían: #{groups.skipped})"
 puts "Kanji de referencia creados: #{groups.reference_kanji.join(' ')}" if groups.reference_kanji.any?
+
+# Tarjetas de repaso (pack srs) para los kanji del plan, los sabidos y los grupos en modo tarjeta.
+KanjiStudy::CardSync.sync_all
+puts "Tarjetas de repaso: #{Srs::Card.count} (#{Srs::Card.group(:state).count.map { |s, n| "#{n} #{s}" }.join(', ')})"
