@@ -134,7 +134,7 @@ docker compose restart web                       # reiniciar solo la app
 
 | Sección | Qué permite |
 |---|---|
-| Inicio | おかえり animado y acceso directo a la semana actual. |
+| Inicio | おかえり animado y acceso directo a la semana actual. La primera vez arranca un **tutorial guiado** (se puede volver a ver desde el menú 私); sus textos están en archivos de traducción, listos para otros idiomas ([cómo](docs/tutorial-e-i18n.md)). |
 | 計画 Plan | Ver las 8 semanas (la actual y las provisionales marcadas). Cada semana muestra sus kanji, sus grupos para distinguir y sus lecciones. |
 | 未完 Pendientes | Los kanji incompletos, filtrados por semana, lección y lo que falta, para completarlos en la misma fila (lecturas escritas como `ショク、ジキ` / `た.べる`). |
 | 漢字 Kanji | Listar por semana (filtro sin recargar), ver la ficha y editar: significado, lecturas on/kun con okurigana, piezas, mnemotecnia, semana y lección. Avisa qué falta completar y si la lección no calza con la semana. |
@@ -189,6 +189,7 @@ docs/decisions/  decisiones de arquitectura (ADR)
 docs/guia-rails-desde-cero.md   cómo construir una app así, paso a paso
 docs/flujo-de-la-aplicacion.md  cómo viaja una request y cómo funciona Hotwire
 docs/archivos-de-la-raiz.md     para qué sirve cada archivo de la raíz
+docs/tutorial-e-i18n.md         el tutorial guiado y cómo agregar otro idioma
 ```
 
 Cada pack tiene su propio README: [`core`](packs/core/README.md), [`srs`](packs/srs/README.md),
