@@ -22,6 +22,10 @@ gem "packs-rails"
 gem "rails-i18n"
 # Lectura de CSV (seed e importación). Desde Ruby 3.4 ya no viene incluida.
 gem "csv"
+# Algoritmo de repetición espaciada FSRS-6 [https://github.com/ondrejrohon/fsrs_ruby]
+# Versión exacta a propósito: gema poco usada, auditada en esta versión (sin dependencias,
+# sin acceso a red/archivos). Solo se usa a través de Srs::Scheduler. Ver docs/decisions/0004.
+gem "fsrs_ruby", "1.0.0"
 # Use Redis adapter to run Action Cable in production
 # gem "redis", ">= 4.0.1"
 
