@@ -22,8 +22,10 @@
 
   <%# Estado del sidebar en el body: data-collapsed (escritorio) y data-open (móvil). %>
   <%= tag.body class: "group/sidebar min-h-screen bg-washi font-sans text-sumi antialiased",
-               data: { controller: "sidebar", action: "keydown.esc@window->sidebar#close",
-                       collapsed: (sidebar_collapsed? ? "" : nil) } do %>
+               data: { controller: "sidebar tour", action: "keydown.esc@window->sidebar#close",
+                       collapsed: (sidebar_collapsed? ? "" : nil),
+                       tour_config_value: tutorial_config.to_json,
+                       tour_autostart_value: tutorial_autostart? } do %>
     <%= render "layouts/sidebar" %>
 
     <div class="min-h-screen transition-[padding] duration-300 ease-out motion-reduce:transition-none

@@ -25,6 +25,7 @@
           <%= content_tag(item.path ? :a : :span,
                 href: item.path,
                 title: item.label,
+                data: { tour: item.key },
                 "aria-current": (active ? "page" : nil),
                 "aria-disabled": (item.path ? nil : "true"),
                 class: ["group/item relative flex items-center gap-3 rounded-md py-2 pl-1.5 pr-2 transition-colors duration-200",
@@ -52,7 +53,7 @@
 
 <%# Colapsar / expandir (escritorio): botón redondo montado sobre el borde del sidebar, arriba.
     Va fuera del <aside> (que recorta lo que sobresale) y se desliza junto con el borde. %>
-<button type="button" data-action="sidebar#toggleCollapsed" data-sidebar-target="toggle"
+<button type="button" data-action="sidebar#toggleCollapsed" data-sidebar-target="toggle" data-tour="collapse"
         aria-controls="sidebar" aria-expanded="<%= !sidebar_collapsed? %>"
         aria-label="Colapsar o expandir el menú" title="Colapsar o expandir el menú"
         class="fixed top-7 z-50 hidden size-6 place-items-center rounded-full border border-sumi/15 bg-washi text-sumi/60 shadow-sm

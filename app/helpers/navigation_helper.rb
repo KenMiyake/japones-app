@@ -1,16 +1,19 @@
 module NavigationHelper
-  NavItem = Data.define(:kanji, :label, :path)
+  # key: identificador para el tutorial (data-tour="…"). Ver config/locales/tutorial.es.yml.
+  NavItem = Data.define(:kanji, :label, :path, :key) do
+    def initialize(kanji:, label:, path:, key: nil) = super
+  end
 
   # Secciones del sidebar. path: nil = todavía no implementada (se muestra como "pronto").
   def nav_items
     [
-      NavItem.new("計画", "Plan", plan_weeks_path),
-      NavItem.new("未完", "Pendientes", pending_kanjis_path),
-      NavItem.new("漢字", "Kanji", kanjis_path),
-      NavItem.new("言葉", "Palabras", words_path),
-      NavItem.new("部品", "Piezas", components_path),
-      NavItem.new("区別", "Distinguir", confusable_groups_path),
-      NavItem.new("既知", "Sabidos", known_kanjis_path)
+      NavItem.new("計画", "Plan", plan_weeks_path, :plan),
+      NavItem.new("未完", "Pendientes", pending_kanjis_path, :pending),
+      NavItem.new("漢字", "Kanji", kanjis_path, :kanji),
+      NavItem.new("言葉", "Palabras", words_path, :words),
+      NavItem.new("部品", "Piezas", components_path, :components),
+      NavItem.new("区別", "Distinguir", confusable_groups_path, :distinguish),
+      NavItem.new("既知", "Sabidos", known_kanjis_path, :known)
     ]
   end
 

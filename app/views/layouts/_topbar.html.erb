@@ -18,7 +18,7 @@
   <div class="ml-auto flex items-center gap-2">
     <%# Atajo a la semana actual %>
     <% if (current_week = PlanWeek.current) %>
-      <%= link_to plan_week_path(current_week), title: "Semana actual",
+      <%= link_to plan_week_path(current_week), title: "Semana actual", data: { tour: "current_week" },
             class: "hidden items-center gap-2 rounded-md px-3 py-1.5 text-sm text-sumi/75 transition-colors hover:bg-sumi/[0.05] hover:text-sumi sm:flex" do %>
         <span class="font-kanji text-xs tracking-[0.2em] text-shu">今週</span>
         <span class="font-medium"><%= current_week.code %></span>
@@ -29,7 +29,7 @@
     <%# Menú de usuario (las opciones llegan con la autenticación) %>
     <div class="group/menu relative" data-controller="dropdown"
          data-action="click@window->dropdown#closeOnOutsideClick keydown.esc@window->dropdown#closeOnEscape">
-      <button type="button" data-dropdown-target="button" data-action="dropdown#toggle"
+      <button type="button" data-dropdown-target="button" data-action="dropdown#toggle" data-tour="user_menu"
               aria-haspopup="menu" aria-expanded="false" aria-controls="user-menu" aria-label="Menú de usuario"
               class="flex items-center gap-2 rounded-full p-1 pr-2 transition-colors hover:bg-sumi/[0.05]">
         <span class="grid size-8 place-items-center rounded-full border border-sumi/15 bg-white/70 font-kanji text-sm">私</span>
@@ -47,6 +47,13 @@
           <p class="text-sm font-medium">Usuario local</p>
           <p class="text-xs text-nezumi">Sin cuenta: la app es de uso personal</p>
         </div>
+        <div class="my-1 h-px bg-sumi/10"></div>
+        <%# Funciona ya: abre el tutorial (controlador tour, en el <body>) %>
+        <button type="button" role="menuitem" data-action="tour#start dropdown#close"
+                class="flex w-full items-center gap-3 rounded px-3 py-2 text-sm text-sumi transition-colors hover:bg-sumi/[0.05]">
+          <span class="w-5 text-center font-kanji text-xs text-shu" aria-hidden="true">案</span>
+          <span class="flex-1 text-left"><%= t("tutorial.open") %></span>
+        </button>
         <div class="my-1 h-px bg-sumi/10"></div>
         <% user_menu_items.each do |item| %>
           <% if item == :divider %>
