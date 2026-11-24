@@ -163,6 +163,7 @@ Docker, modelos, Hotwire y packs.
 packs/
   core/          lecciones de Minna y semanas del plan
   kanji_study/   kanji, lecturas, palabras, piezas, grupos para distinguir, kanji sabidos
+  srs/           repetición espaciada: tarjetas, repasos y el algoritmo FSRS
 app/             layout, estilos y lo transversal
 docs/decisions/  decisiones de arquitectura (ADR)
 docs/guia-rails-desde-cero.md   cómo construir una app así, paso a paso
@@ -170,7 +171,7 @@ docs/flujo-de-la-aplicacion.md  cómo viaja una request y cómo funciona Hotwire
 docs/archivos-de-la-raiz.md     para qué sirve cada archivo de la raíz
 ```
 
-Cada pack tiene su propio README: [`core`](packs/core/README.md),
+Cada pack tiene su propio README: [`core`](packs/core/README.md), [`srs`](packs/srs/README.md),
 [`kanji_study`](packs/kanji_study/README.md).
 
 Cada pack tiene su propio `app/`, `config/routes/`, `config/locales/` y `test/`. Rails
@@ -190,6 +191,7 @@ agregaría la suya igual, sin tocar `core`.
 - [0001 · Packs por dominio](docs/decisions/0001-packs-por-dominio.md)
 - [0002 · Estilos con Tailwind](docs/decisions/0002-estilos-con-tailwind.md)
 - [0003 · Modelo de datos de la v1](docs/decisions/0003-modelo-de-datos-v1.md)
+- [0004 · Repaso propio con FSRS](docs/decisions/0004-repaso-propio-con-fsrs.md)
 
 ## Cargar los datos iniciales
 
