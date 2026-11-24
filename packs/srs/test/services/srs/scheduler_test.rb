@@ -108,6 +108,39 @@ module Srs
       assert_equal 0, Review.count
     end
 
+    test "mark_known! gradúa una tarjeta nueva a repaso con la fecha indicada y sin registrar repasos" do
+      due = @now + 4.days
+
+      @scheduler.mark_known!(@card, now: @now, due_at: due)
+
+      @card.reload
+      assert @card.state_review?
+      assert_equal due, @card.due_at
+      assert_equal 4, @card.scheduled_days
+      assert_operator @card.stability, :>, 1
+      assert_equal 0, @card.reps
+      assert_equal 0, @card.reviews.count
+    end
+
+    test "mark_known! no toca tarjetas ya vistas" do
+      @scheduler.review!(@card, :good, now: @now)
+
+      @scheduler.mark_known!(@card, now: @now, due_at: @now + 5.days)
+
+      assert @card.reload.state_learning?
+    end
+
+    test "reset! vuelve la tarjeta a nueva" do
+      @scheduler.mark_known!(@card, now: @now)
+
+      @scheduler.reset!(@card, now: @now)
+
+      @card.reload
+      assert @card.state_new?
+      assert_equal 0.0, @card.stability
+      assert_nil @card.last_reviewed_at
+    end
+
     test "retrievability es nil en tarjetas nuevas y baja con el tiempo" do
       assert_nil @scheduler.retrievability(@card, now: @now)
 
