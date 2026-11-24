@@ -134,7 +134,9 @@ docker compose restart web                       # reiniciar solo la app
 
 | Sección | Qué permite |
 |---|---|
+| Inicio | おかえり animado y acceso directo a la semana actual. |
 | 計画 Plan | Ver las 8 semanas (la actual y las provisionales marcadas). Cada semana muestra sus kanji, sus grupos para distinguir y sus lecciones. |
+| 未完 Pendientes | Los kanji incompletos, filtrados por semana, lección y lo que falta, para completarlos en la misma fila (lecturas escritas como `ショク、ジキ` / `た.べる`). |
 | 漢字 Kanji | Listar por semana (filtro sin recargar), ver la ficha y editar: significado, lecturas on/kun con okurigana, piezas, mnemotecnia, semana y lección. Avisa qué falta completar y si la lección no calza con la semana. |
 | 言葉 Palabras | Palabras de ejemplo que se enlazan solas con sus kanji (電車 → 電, 車). Búsqueda mientras se escribe. |
 | 部品 Piezas | Componentes de los kanji con tus propios nombres; se crean también desde el formulario del kanji. |
@@ -142,7 +144,25 @@ docker compose restart web                       # reiniciar solo la app
 | 既知 Sabidos | Marcar qué kanji ya sabes, uno a uno o por semana. |
 
 Detalle de modelos, reglas, rutas y Hotwire de cada pack:
-[`core`](packs/core/README.md) · [`kanji_study`](packs/kanji_study/README.md).
+[`core`](packs/core/README.md) · [`kanji_study`](packs/kanji_study/README.md) ·
+[`srs`](packs/srs/README.md).
+
+### Repaso con repetición espaciada (en construcción)
+
+La app reemplaza a Anki: tiene su propio repaso con el algoritmo **FSRS**
+([ADR 0004](docs/decisions/0004-repaso-propio-con-fsrs.md)). Ya existen las tarjetas
+(**Leer** y **Escribir** por kanji, **Distinguir** por grupo en modo tarjeta) y la cola
+diaria; la pantalla de repaso llega en el siguiente paso.
+
+- **Kanji nuevos:** entran **5 por día en el orden del plan**, cada uno con sus dos tarjetas.
+  El primer día son 英 新 場 地 階; el segundo, 何 語 聞 車 円.
+- **Si vienes de Anki:**
+  1. En **Sabidos**, marca los kanji que ya sabes: sus tarjetas pasan a *en repaso* y se
+     reparten en los próximos 7 días.
+  2. Si alguno se te olvidó (como 場, 地 y 階), abre su ficha y, en **Repaso**, presiona
+     **Olvidado**: vuelve hoy para reaprenderlo.
+- En la ficha de cada kanji, la sección **Repaso** muestra el estado de cada tarjeta y cuándo
+  toca repasarla.
 
 ¿Cómo se construye una app así desde cero? Ver la
 [guía paso a paso](docs/guia-rails-desde-cero.md): instalar Ruby y Rails, crear la app,
@@ -206,6 +226,7 @@ Carga desde `db/seeds/`:
 | `plan.csv` | Lecciones L01–L25 de Minna I y semanas S1–S8 (desde el lunes 23/11/2026, consecutivas) |
 | `plan.csv` (columna `kanji`) | Los 196 kanji del plan, cada uno en su semana y en el orden del CSV, sin significado ni lecturas |
 | `confusable_groups.csv` | Los 22 grupos para distinguir (tarjeta / papel / por confirmar) y los 8 kanji de referencia que no están en el plan (人 日 目 干 会 小 大 水) |
+| (al final) | Las tarjetas de repaso: Leer y Escribir por kanji del plan y Distinguir por grupo en modo tarjeta |
 
 El seed es **idempotente y no destructivo**: crea solo lo que falta y nunca sobrescribe lo
 que ya editaste en la app. Se puede volver a correr sin problema.
