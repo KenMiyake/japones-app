@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.1].define(version: 2026_11_24_024622) do
+ActiveRecord::Schema[8.1].define(version: 2026_11_24_025716) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_catalog.plpgsql"
 
@@ -134,9 +134,11 @@ ActiveRecord::Schema[8.1].define(version: 2026_11_24_024622) do
     t.datetime "last_reviewed_at"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.integer "new_rank"
     t.index ["due_at"], name: "index_srs_cards_on_due_at"
     t.index ["reviewable_type", "reviewable_id", "card_type"], name: "index_srs_cards_on_reviewable_and_type", unique: true
     t.index ["reviewable_type", "reviewable_id"], name: "index_srs_cards_on_reviewable"
+    t.index ["state", "new_rank"], name: "index_srs_cards_on_state_and_new_rank"
     t.check_constraint "state::text = ANY (ARRAY['new'::character varying, 'learning'::character varying, 'review'::character varying, 'relearning'::character varying]::text[])", name: "srs_cards_state"
   end
 
