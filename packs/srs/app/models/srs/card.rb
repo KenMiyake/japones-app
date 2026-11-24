@@ -21,6 +21,8 @@ module Srs
     scope :due, ->(now = Time.current) { where.not(state: "new").where(due_at: ..now) }
     scope :unseen, -> { where(state: "new") }
     scope :by_due, -> { order(:due_at, :id) }
+    scope :by_new_rank, -> { order(arel_table[:new_rank].asc.nulls_last, :id) }
+    scope :of_types, ->(types) { types ? where(card_type: Array(types).map(&:to_s)) : all }
 
     # Vuelve a pedir la tarjeta (o crea una nueva) para algo repasable y un tipo de tarjeta.
     def self.for(reviewable, card_type)
