@@ -57,6 +57,32 @@ module Srs
       card
     end
 
+    # Gradúa directo a repaso una tarjeta nueva de algo que ya se sabe (p. ej. un kanji marcado
+    # como sabido): toma la estabilidad y la dificultad de una respuesta "Fácil", pero con la
+    # fecha que se le indique (para repartir los repasos). No registra un repaso: no lo hubo.
+    def mark_known!(card, now: Time.current, due_at: now + 1.day)
+      return card unless card.state_new?
+
+      easy = @fsrs.repeat(to_fsrs(card), now)[RATINGS.fetch("easy")].card
+      card.update!(
+        card_attributes(easy).merge(
+          due_at:, last_reviewed_at: now, reps: 0,
+          scheduled_days: [ (due_at.to_date - now.to_date).to_i, 1 ].max
+        )
+      )
+      card
+    end
+
+    # Vuelve la tarjeta a "nueva", como si nunca se hubiera visto. No borra repasos: quien la
+    # llama decide si corresponde (p. ej. solo si la tarjeta no tiene repasos).
+    def reset!(card, now: Time.current)
+      card.update!(
+        state: "new", due_at: now, stability: 0.0, difficulty: 0.0, elapsed_days: 0,
+        scheduled_days: 0, learning_steps: 0, reps: 0, lapses: 0, last_reviewed_at: nil
+      )
+      card
+    end
+
     # Probabilidad (0–1) de recordar la tarjeta ahora. nil si nunca se repasó.
     def retrievability(card, now: Time.current)
       return if card.state_new?
