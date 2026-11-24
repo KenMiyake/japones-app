@@ -1,0 +1,5 @@
+# srs: motor de repetición espaciada (tarjetas, repasos y el algoritmo FSRS).
+# Genérico: no depende de ningún dominio. Las tarjetas apuntan a lo que se repasa con una
+# relación polimórfica (reviewable). Ver docs/decisions/0004.
+enforce_dependencies: false
+dependencies: []

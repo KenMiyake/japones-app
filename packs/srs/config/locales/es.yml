@@ -1,0 +1,25 @@
+es:
+  activerecord:
+    models:
+      srs/card:
+        one: Tarjeta
+        other: Tarjetas
+      srs/review:
+        one: Repaso
+        other: Repasos
+    attributes:
+      srs/card:
+        card_type: Tipo de tarjeta
+        state: Estado
+        due_at: Próximo repaso
+  srs:
+    states:
+      new: nueva
+      learning: aprendiendo
+      review: en repaso
+      relearning: reaprendiendo
+    ratings:
+      again: Otra vez
+      hard: Difícil
+      good: Bien
+      easy: Fácil
