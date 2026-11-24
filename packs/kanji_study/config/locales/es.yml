@@ -82,6 +82,10 @@ es:
     reading_kinds:
       "on": "On"
       kun: "Kun"
+    card_types:
+      read: Leer
+      write: Escribir
+      distinguish: Distinguir
     practice_modes:
       card: tarjeta
       paper: papel

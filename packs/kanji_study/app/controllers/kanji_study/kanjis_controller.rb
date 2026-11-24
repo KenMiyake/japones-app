@@ -52,7 +52,7 @@ module KanjiStudy
     private
 
     def set_kanji
-      @kanji = Kanji.includes(:readings, :plan_week, :lesson, :known_mark, :words, :components, confusable_groups: :kanjis)
+      @kanji = Kanji.includes(:readings, :plan_week, :lesson, :known_mark, :words, :components, :srs_cards, confusable_groups: :kanjis)
                     .find_by!(character: params[:id])
     end
 

@@ -73,6 +73,30 @@
       </dd>
     </dl>
 
+    <% if @kanji.srs_cards.any? %>
+      <section id="kanji_cards" class="mt-10">
+        <h2 class="mb-3 text-xs font-medium uppercase tracking-[0.2em] text-nezumi">Repaso</h2>
+        <ul class="divide-y divide-sumi/10 border-y border-sumi/10 text-sm">
+          <% @kanji.srs_cards.sort_by(&:new_rank).each do |card| %>
+            <li id="<%= dom_id(card) %>" class="flex flex-wrap items-center gap-x-4 gap-y-1 py-2.5">
+              <span class="w-16 font-medium"><%= card_type_label(card) %></span>
+              <span class="text-nezumi"><%= card_state_label(card) %></span>
+              <span class="text-nezumi">· <%= card_due_label(card) %></span>
+              <% if card.lapses.positive? %>
+                <span class="text-kincha">· olvidada <%= pluralize(card.lapses, "vez", plural: "veces") %></span>
+              <% end %>
+              <% unless card.state_new? %>
+                <%= button_to "Olvidado", forgot_kanji_card_path(@kanji, card.card_type), method: :post,
+                      form_class: "ml-auto print:hidden",
+                      class: "rounded px-2 py-1 text-xs text-shu transition-colors hover:bg-shu/[0.06]",
+                      data: { turbo_confirm: "¿Marcar #{@kanji.character} (#{card_type_label(card)}) como olvidado? Volverá hoy." } %>
+              <% end %>
+            </li>
+          <% end %>
+        </ul>
+      </section>
+    <% end %>
+
     <section class="mt-10">
       <h2 class="mb-3 text-xs font-medium uppercase tracking-[0.2em] text-nezumi">Mnemotecnia</h2>
       <% if @kanji.mnemonic %>

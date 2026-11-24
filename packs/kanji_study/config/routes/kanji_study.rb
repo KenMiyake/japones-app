@@ -3,6 +3,10 @@ scope module: :kanji_study do
   resources :kanjis do
     # Marcar / desmarcar como sabido: POST / DELETE /kanjis/食/known_mark
     resource :known_mark, only: %i[create destroy]
+    # "Olvidado": POST /kanjis/食/cards/read/forgot (la tarjeta vuelve hoy, en reaprendizaje)
+    resources :cards, only: [], param: :card_type, controller: "kanji_cards" do
+      post :forgot, on: :member
+    end
   end
 
   # Grupos para distinguir. El modo de práctica se cambia desde la tarjeta del grupo:
